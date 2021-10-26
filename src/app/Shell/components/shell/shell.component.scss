@@ -1,0 +1,37 @@
+:host {
+	.titleContent {
+		text-align: left;
+		margin-top: 5px;
+		margin-bottom: 5px;
+		margin-right: 10px;
+	}
+}
+
+.breadcrumb {
+	background-color: transparent;
+}
+
+.breadcrumb-item {
+	+ .breadcrumb-item::before {
+		$breadcrumb-divider: quote('|');
+		content: '#{$breadcrumb-divider}';
+	}
+}
+a {
+	color: rgb(161, 148, 148);
+}
+
+a.activeLink,
+a:hover {
+	color: #2f85fa;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+#sidebar {
+	border-right: 1px solid rgb(204, 201, 201);
+	font-family: "Segoe UI", serif;
+}
+#navbar {
+	border-bottom: 1px solid rgb(204, 201, 201);
+}

@@ -1,0 +1,102 @@
+<h3>New Project</h3>
+<hr />
+<div class="container">
+	<form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+		<div class="row">
+			<div class="col-md-2">
+				<label for="projectNumber">Project Number <span class="compulsory-attribute">*</span></label>
+			</div>
+			<div class="col-md-9">
+				<input class="input" type="number" id="projectNumber" formControlName="PROJECT_NUMBER" />
+				<br />
+				<span
+					*ngIf="!projectForm.get('PROJECT_NUMBER').valid && projectForm.get('PROJECT_NUMBER').touched"
+					class="help-block"
+				>
+					Project number is required!</span
+				>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-2">
+				<label for="projectName">Project name <span class="compulsory-attribute">*</span></label>
+			</div>
+			<div class="col-md-10">
+				<input class="input long-input" type="text" id="projectName" formControlName="NAME" />
+				<br />
+				<span *ngIf="!projectForm.get('NAME').valid && projectForm.get('NAME').touched" class="help-block">
+					Project name is required!</span
+				>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-2">
+				<label for="customer">Customer <span class="compulsory-attribute">*</span></label>
+			</div>
+			<div class="col-md-10">
+				<input class="input long-input" type="text" id="customer" formControlName="CUSTOMER" />
+				<br />
+				<span
+					*ngIf="!projectForm.get('CUSTOMER').valid && projectForm.get('CUSTOMER').touched"
+					class="help-block"
+				>
+					Customer is required!</span
+				>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-2">
+				<label for="group">Group <span class="compulsory-attribute">*</span></label>
+			</div>
+			<div class="col-md-10">
+				<select id="group" class="custom-dropdown form-control" formControlName="GROUP_ID">
+					<option value="1">1</option>
+					<option value="2">2</option>
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-2">
+				<label for="members">Members </label>
+			</div>
+			<div class="col-md-10">
+				<input class="input long-input" type="text" id="members" />
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-2">
+				<label for="status">Status <span class="compulsory-attribute">*</span></label>
+			</div>
+			<div class="col-md-10">
+				<select id="status" class="custom-dropdown form-control" formControlName="STATUS">
+					<option value="new">New</option>
+					<option value="aab">Saab</option>
+					<option value="mers">Mercedes</option>
+					<option value="aud">Audi</option>
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-2 col-md-2 col col-sm-6">
+				<label for="startDate">Start date <span class="compulsory-attribute">*</span></label>
+			</div>
+			<div class="col-lg-3 col-md-9 col col-sm-6">
+				<input class="input-date" type="date" id="startDate" formControlName="START_DATE" />
+			</div>
+			<div class="col-lg-2 col-md-2 col col-sm-6">
+				<label for="endDate">End date </label>
+			</div>
+			<div class="col-lg-3 col-md-9 col col-sm-6">
+				<input class="input-date" type="date" id="endDate" formControlName="END_DATE" />
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-5"></div>
+			<div class="col-md-7">
+				<button class="btn btn-light">Cancel</button>
+				<button class="btn btn-primary" type="submit" [disabled]="!projectForm.valid">Create Project</button>
+			</div>
+		</div>
+	</form>
+</div>
+<hr />
