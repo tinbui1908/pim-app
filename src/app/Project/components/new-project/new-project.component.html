@@ -1,5 +1,8 @@
 <h3>New Project</h3>
 <hr />
+<div class="alert alert-danger" *ngIf="!projectForm.valid && projectForm.touched">
+	<p>Please enter all the mandatory fields (*)</p>
+</div>
 <div class="container">
 	<form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
 		<div class="row">
@@ -12,8 +15,12 @@
 				<span
 					*ngIf="!projectForm.get('PROJECT_NUMBER').valid && projectForm.get('PROJECT_NUMBER').touched"
 					class="help-block"
-				>
-					Project number is required!</span
+					><span *ngIf="projectForm.get('PROJECT_NUMBER').errors['required']"
+						>Project number is required!</span
+					>
+					<span *ngIf="projectForm.get('PROJECT_NUMBER').errors['existNumber']"
+						>The project number already existed. Please select a different project number</span
+					></span
 				>
 			</div>
 		</div>
@@ -50,8 +57,7 @@
 			</div>
 			<div class="col-md-10">
 				<select id="group" class="custom-dropdown form-control" formControlName="GROUP_ID">
-					<option value="1">1</option>
-					<option value="2">2</option>
+					<option *ngFor="let group of groupList" value="{{ group.ID }}">{{ group.ID }}</option>
 				</select>
 			</div>
 		</div>

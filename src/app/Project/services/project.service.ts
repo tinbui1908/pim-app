@@ -6,9 +6,7 @@ import { Subject, throwError } from 'rxjs';
 import { Project } from '../project.model';
 import { environment } from '../../../environments/environment';
 
-@Injectable({
-	providedIn: 'root'
-})
+@Injectable()
 export class ProjectService {
 	listProjects: Project[] = [];
 	listProjectsChange = new Subject<Project[]>();
@@ -16,10 +14,20 @@ export class ProjectService {
 	constructor(private http: HttpClient) {}
 
 	createNewProject(project: Project) {
-		return this.http.post<Project>(environment.apiUrl + '/project', project, {
-			observe: 'response',
-			responseType: 'json'
-		});
+		return this.http
+			.post<Project>(environment.apiUrl + '/project', project, {
+				observe: 'response',
+				responseType: 'json'
+			})
+			.pipe(
+				map((response) => {
+					return response.body;
+				}),
+				tap((project) => {
+					this.listProjects.push(project);
+					this.listProjectsChange.next(this.listProjects.slice());
+				})
+			);
 	}
 
 	fetchProjects() {
