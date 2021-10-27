@@ -8,8 +8,7 @@ import { EnvironmentApiConfiguration } from './api-config';
 import { AppComponent } from './app.component';
 import { ProjectModule } from './Project/project.module';
 import { ProjectService } from './Project/services/project.service';
-import { GroupService } from './Group/group.service';
-import { EmployeeService } from './Employee/employee.service';
+import { GroupService } from 'src/app/Group/group.service';
 @NgModule({
 	declarations: [AppComponent],
 	imports: [BrowserModule, AppRoutingModule, HttpClientModule, ProjectModule],
@@ -18,9 +17,8 @@ import { EmployeeService } from './Employee/employee.service';
 			provide: ApiConfiguration,
 			useClass: EnvironmentApiConfiguration as any
 		},
-		GroupService,
 		ProjectService,
-		EmployeeService
+		GroupService
 	],
 	bootstrap: [AppComponent]
 })

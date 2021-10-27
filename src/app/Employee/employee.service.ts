@@ -1,12 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map } from 'rxjs/operators';
-import { throwError, Subject, Observable, of } from 'rxjs';
+import { throwError } from 'rxjs';
 
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 import { Employee } from './employee.model';
 
-@Injectable()
+@Injectable({
+	providedIn: 'root'
+})
 export class EmployeeService {
 	membersID: number[];
 	constructor(private http: HttpClient) {}
@@ -26,7 +28,6 @@ export class EmployeeService {
 				catchError((errorRes) => {
 					return throwError(errorRes);
 				})
-			)
-			.subscribe();
+			);
 	}
 }

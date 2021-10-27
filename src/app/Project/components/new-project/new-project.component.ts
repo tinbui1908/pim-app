@@ -30,23 +30,20 @@ export class NewProjectComponent implements OnInit {
 	}
 
 	checkMembers(members: string[]) {
-		members.map((member) => this.employeeService.fetchEmployeeByVisa(member));
+		members.map((member) => this.employeeService.fetchEmployeeByVisa(member).subscribe());
 	}
+
 	onSubmit() {
 		try {
 			const members = this.projectForm.get('members').value.split(',');
 			const membersID: number[] = [];
 
 			this.checkMembers(members);
-			console.log(this.employeeService.membersID);
 
 			if (membersID.length === members.length) {
 				this.projectForm.get('members').setValue(membersID);
-				console.log(this.projectForm.get('members').value);
 			}
 
-			this.projectForm.get('GROUP_ID').setValue(+this.projectForm.value.GROUP_ID);
-			console.log(this.projectForm.get('members').value);
 			this.projectForm.get('GROUP_ID').setValue(+this.projectForm.value.GROUP_ID);
 			this.projectService.createNewProject(this.projectForm.value).subscribe();
 			this.projectForm.reset();

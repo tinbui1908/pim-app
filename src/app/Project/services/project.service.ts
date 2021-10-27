@@ -45,6 +45,7 @@ export class ProjectService {
 				}),
 				tap((projects: Project[]) => {
 					this.listProjects = projects;
+					this.listProjectsChange.next(this.listProjects.slice());
 				}),
 				catchError((errorRes) => {
 					return throwError(errorRes);
