@@ -40,11 +40,11 @@
 						<input type="checkbox" aria-label="Checkbox" id="checkbox"
 					/></span>
 				</td>
-				<td>{{ project.PROJECT_NUMBER }}</td>
-				<td>{{ project.NAME }}</td>
-				<td>{{ project.STATUS }}</td>
-				<td>{{ project.CUSTOMER }}</td>
-				<td>{{ project.START_DATE | date: 'dd.MM.yyyy' }}</td>
+				<td>{{ project.projectNumber }}</td>
+				<td>{{ project.name }}</td>
+				<td>{{ project.status }}</td>
+				<td>{{ project.customer }}</td>
+				<td>{{ project.startDate | date: 'dd.MM.yyyy' }}</td>
 				<td>
 					<i class="fa fa-trash-o" style="color: red" aria-hidden="true" [routerLink]=""></i>
 				</td>

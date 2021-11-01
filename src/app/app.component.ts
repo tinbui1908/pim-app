@@ -1,6 +1,7 @@
-import { GroupService } from './Group/group.service';
 import { Component, OnInit } from '@angular/core';
 
+import { EmployeeService } from './Employee/employee.service';
+import { GroupService } from './Group/group.service';
 import { ProjectService } from './Project/services/project.service';
 
 @Component({
@@ -9,12 +10,17 @@ import { ProjectService } from './Project/services/project.service';
 	styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-	constructor(private projectService: ProjectService, private groupService: GroupService) {}
+	constructor(
+		private projectService: ProjectService,
+		private groupService: GroupService,
+		private employeeService: EmployeeService
+	) {}
 
 	ngOnInit() {
 		try {
-			this.projectService.fetchProjects().subscribe();
-			this.groupService.fetchGroups().subscribe();
+			this.projectService.fetchProjects();
+			this.groupService.fetchGroups();
+			this.employeeService.fetchEmployees();
 		} catch (error) {
 			console.log(error.message);
 		}

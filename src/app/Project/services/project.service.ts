@@ -8,8 +8,8 @@ import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class ProjectService {
-	listProjects: Project[] = [];
-	listProjectsChange = new Subject<Project[]>();
+	projects: Project[] = [];
+	projectsChange = new Subject<Project[]>();
 
 	constructor(private http: HttpClient) {}
 
@@ -24,10 +24,11 @@ export class ProjectService {
 					return response.body;
 				}),
 				tap((project) => {
-					this.listProjects.push(project);
-					this.listProjectsChange.next(this.listProjects.slice());
+					this.projects.push(project);
+					this.projectsChange.next(this.projects.slice());
 				})
-			);
+			)
+			.subscribe();
 	}
 
 	fetchProjects() {
@@ -44,12 +45,13 @@ export class ProjectService {
 					return projectsArray;
 				}),
 				tap((projects: Project[]) => {
-					this.listProjects = projects;
-					this.listProjectsChange.next(this.listProjects.slice());
+					this.projects = projects;
+					this.projectsChange.next(this.projects.slice());
 				}),
 				catchError((errorRes) => {
 					return throwError(errorRes);
 				})
-			);
+			)
+			.subscribe();
 	}
 }

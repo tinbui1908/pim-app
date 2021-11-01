@@ -1,8 +1,8 @@
 <h3>New Project</h3>
 <hr />
-<div class="alert alert-danger" *ngIf="!projectForm.valid && projectForm.touched">
+<!-- <div class="alert alert-danger" *ngIf="!projectForm.valid && projectForm.touched">
 	<p>Please enter all the mandatory fields (*)</p>
-</div>
+</div> -->
 <div class="container">
 	<form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
 		<div class="row">
@@ -10,15 +10,15 @@
 				<label for="projectNumber">Project Number <span class="compulsory-attribute">*</span></label>
 			</div>
 			<div class="col-md-9">
-				<input class="input" type="number" id="projectNumber" formControlName="PROJECT_NUMBER" />
+				<input class="input" type="number" id="projectNumber" formControlName="projectNumber" />
 				<br />
 				<span
-					*ngIf="!projectForm.get('PROJECT_NUMBER').valid && projectForm.get('PROJECT_NUMBER').touched"
+					*ngIf="!projectForm.get('projectNumber').valid && projectForm.get('projectNumber').touched"
 					class="help-block"
-					><span *ngIf="projectForm.get('PROJECT_NUMBER').errors['required']"
+					><span *ngIf="projectForm.get('projectNumber').errors['required']"
 						>Project number is required!</span
 					>
-					<span *ngIf="projectForm.get('PROJECT_NUMBER').errors['existNumber']"
+					<span *ngIf="projectForm.get('projectNumber').errors['existNumber']"
 						>The project number already existed. Please select a different project number</span
 					></span
 				>
@@ -29,9 +29,9 @@
 				<label for="projectName">Project name <span class="compulsory-attribute">*</span></label>
 			</div>
 			<div class="col-md-10">
-				<input class="input long-input" type="text" id="projectName" formControlName="NAME" />
+				<input class="input long-input" type="text" id="projectName" formControlName="name" />
 				<br />
-				<span *ngIf="!projectForm.get('NAME').valid && projectForm.get('NAME').touched" class="help-block">
+				<span *ngIf="!projectForm.get('name').valid && projectForm.get('name').touched" class="help-block">
 					Project name is required!</span
 				>
 			</div>
@@ -41,10 +41,10 @@
 				<label for="customer">Customer <span class="compulsory-attribute">*</span></label>
 			</div>
 			<div class="col-md-10">
-				<input class="input long-input" type="text" id="customer" formControlName="CUSTOMER" />
+				<input class="input long-input" type="text" id="customer" formControlName="customer" />
 				<br />
 				<span
-					*ngIf="!projectForm.get('CUSTOMER').valid && projectForm.get('CUSTOMER').touched"
+					*ngIf="!projectForm.get('customer').valid && projectForm.get('customer').touched"
 					class="help-block"
 				>
 					Customer is required!</span
@@ -56,8 +56,8 @@
 				<label for="group">Group <span class="compulsory-attribute">*</span></label>
 			</div>
 			<div class="col-md-10">
-				<select id="group" class="custom-dropdown form-control" formControlName="GROUP_ID">
-					<option *ngFor="let group of groupList" value="{{ group.ID }}">{{ group.ID }}</option>
+				<select id="group" class="custom-dropdown form-control" formControlName="groupId">
+					<option *ngFor="let group of groupsLoaded" value="{{ group.id }}">{{ group.id }}</option>
 				</select>
 			</div>
 		</div>
@@ -66,7 +66,7 @@
 				<label for="members">Members </label>
 			</div>
 			<div class="col-md-10">
-				<input class="input long-input" type="text" id="members" />
+				<input class="input long-input" type="text" id="members" formControlName="members" />
 			</div>
 		</div>
 		<div class="row">
@@ -74,7 +74,7 @@
 				<label for="status">Status <span class="compulsory-attribute">*</span></label>
 			</div>
 			<div class="col-md-10">
-				<select id="status" class="custom-dropdown form-control" formControlName="STATUS">
+				<select id="status" class="custom-dropdown form-control" formControlName="status">
 					<option value="new">New</option>
 					<option value="aab">Saab</option>
 					<option value="mers">Mercedes</option>
@@ -87,13 +87,13 @@
 				<label for="startDate">Start date <span class="compulsory-attribute">*</span></label>
 			</div>
 			<div class="col-lg-3 col-md-9 col col-sm-6">
-				<input class="input-date" type="date" id="startDate" formControlName="START_DATE" />
+				<input class="input-date" type="date" id="startDate" formControlName="startDate" />
 			</div>
 			<div class="col-lg-2 col-md-2 col col-sm-6">
 				<label for="endDate">End date </label>
 			</div>
 			<div class="col-lg-3 col-md-9 col col-sm-6">
-				<input class="input-date" type="date" id="endDate" formControlName="END_DATE" />
+				<input class="input-date" type="date" id="endDate" formControlName="endDate" />
 			</div>
 		</div>
 		<div class="row">

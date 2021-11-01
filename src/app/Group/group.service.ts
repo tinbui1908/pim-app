@@ -1,14 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, tap } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { throwError, Subject } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 import { Group } from './group.model';
 
 @Injectable()
 export class GroupService {
-	listGroups: Group[] = [];
+	groups: Group[] = [];
+	groupsChange = new Subject<Group[]>();
 
 	constructor(private http: HttpClient) {}
 
@@ -26,11 +27,13 @@ export class GroupService {
 					return groupsArray;
 				}),
 				tap((groups: Group[]) => {
-					this.listGroups = groups;
+					this.groups = groups;
+					this.groupsChange.next(this.groups.slice());
 				}),
 				catchError((errorRes) => {
 					return throwError(errorRes);
 				})
-			);
+			)
+			.subscribe();
 	}
 }
