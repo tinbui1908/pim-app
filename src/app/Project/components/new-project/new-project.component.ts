@@ -1,13 +1,13 @@
 import { Subscription } from 'rxjs';
-import { Employee } from './../../../Employee/employee.model';
-import { EmployeeService } from './../../../Employee/employee.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
+import { Group } from '../../../Shared/Group/group.model';
+import { Employee } from '../../../Shared/Employee/employee.model';
 import { ProjectService } from '../../services/project.service';
-import { Group } from './../../../Group/group.model';
-import { ActivatedRoute, Router } from '@angular/router';
-import { GroupService } from 'src/app/Group/group.service';
+import { GroupService } from '../../services/group.service';
+import { EmployeeService } from '../../services/employee.service';
 
 @Component({
 	selector: 'app-new-project',
@@ -16,8 +16,8 @@ import { GroupService } from 'src/app/Group/group.service';
 })
 export class NewProjectComponent implements OnInit, OnDestroy {
 	projectForm: FormGroup;
-	groupsLoaded: Group[];
-	employeesLoaded: Employee[];
+	groups: Group[];
+	employees: Employee[];
 
 	groupsSubscription!: Subscription;
 	employeesSubscription!: Subscription;
@@ -32,20 +32,22 @@ export class NewProjectComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.initForm();
-		this.groupsLoaded = this.groupService.groups;
-		this.employeesLoaded = this.employeeService.employees;
-		this.groupsSubscription = this.groupService.groupsChange.subscribe((groups: Group[]) => {
-			this.groupsLoaded = groups;
+
+		this.groups = this.groupService.getGroups();
+		this.groupsSubscription = this.groupService.groupsChanged.subscribe((groups: Group[]) => {
+			this.groups = groups;
 		});
+
+		this.employees = this.employeeService.getEmployees();
 		this.employeesSubscription = this.employeeService.employeesChange.subscribe((employees: Employee[]) => {
-			this.employeesLoaded = employees;
+			this.employees = employees;
 		});
 	}
 
 	checkMembers(members: string[]): number[] {
 		const membersID: number[] = [];
 		for (let member of members) {
-			const existEmployee = this.employeesLoaded.find((employee) => employee.visa === member);
+			const existEmployee = this.employees.find((employee) => employee.visa === member);
 			if (existEmployee) {
 				membersID.push(existEmployee.id);
 			}

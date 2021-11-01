@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import { EmployeeService } from './Employee/employee.service';
-import { GroupService } from './Group/group.service';
 import { ProjectService } from './Project/services/project.service';
+import { EmployeeDataStorageService } from './Shared/Employee/employee-data-storage.service';
+import { GroupDataStorageService } from './Shared/Group/group-data-storage.service';
 
 @Component({
 	selector: 'app-root',
@@ -12,15 +12,15 @@ import { ProjectService } from './Project/services/project.service';
 export class AppComponent implements OnInit {
 	constructor(
 		private projectService: ProjectService,
-		private groupService: GroupService,
-		private employeeService: EmployeeService
+		private employeeDataStorageService: EmployeeDataStorageService,
+		private groupDataStorageService: GroupDataStorageService
 	) {}
 
 	ngOnInit() {
 		try {
+			this.groupDataStorageService.fetchGroups();
+			this.employeeDataStorageService.fetchEmployees();
 			this.projectService.fetchProjects();
-			this.groupService.fetchGroups();
-			this.employeeService.fetchEmployees();
 		} catch (error) {
 			console.log(error.message);
 		}

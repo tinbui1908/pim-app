@@ -3,6 +3,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { Project } from '../../project.model';
 import { ProjectService } from '../../services/project.service';
+import { GroupDataStorageService } from './../../../Shared/Group/group-data-storage.service';
 
 @Component({
 	selector: 'pim-project-list',

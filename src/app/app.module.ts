@@ -7,8 +7,10 @@ import { ApiConfiguration } from './swagger/api-configuration';
 import { EnvironmentApiConfiguration } from './api-config';
 import { AppComponent } from './app.component';
 import { ProjectModule } from './Project/project.module';
+import { GroupService } from './Project/services/group.service';
+import { EmployeeService } from './Project/services/employee.service';
 import { ProjectService } from './Project/services/project.service';
-import { GroupService } from 'src/app/Group/group.service';
+
 @NgModule({
 	declarations: [AppComponent],
 	imports: [BrowserModule, AppRoutingModule, HttpClientModule, ProjectModule],
@@ -18,7 +20,8 @@ import { GroupService } from 'src/app/Group/group.service';
 			useClass: EnvironmentApiConfiguration as any
 		},
 		ProjectService,
-		GroupService
+		GroupService,
+		EmployeeService
 	],
 	bootstrap: [AppComponent]
 })
