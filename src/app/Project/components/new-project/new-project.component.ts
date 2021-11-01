@@ -1,5 +1,5 @@
 import { ProjectDataStorageService } from './../../../Shared/Project/project-data-storage.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -19,6 +19,8 @@ export class NewProjectComponent implements OnInit, OnDestroy {
 	projectForm: FormGroup;
 	groups: Group[];
 	employees: Employee[];
+	memberIDs: number[] = [];
+	notExistMembers: string = '';
 
 	groupsSubscription!: Subscription;
 	employeesSubscription!: Subscription;
@@ -46,27 +48,9 @@ export class NewProjectComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	checkMembers(members: string[]): number[] {
-		const membersID: number[] = [];
-		for (let member of members) {
-			const existEmployee = this.employees.find((employee) => employee.visa === member);
-			if (existEmployee) {
-				membersID.push(existEmployee.id);
-			}
-		}
-		return membersID;
-	}
-
 	onSubmit() {
 		try {
-			const members = this.projectForm.get('members').value.split(', ');
-
-			const membersID = this.checkMembers(members);
-
-			if (membersID.length === members.length) {
-				this.projectForm.get('members').setValue(membersID);
-			}
-
+			this.projectForm.get('members').setValue(this.memberIDs);
 			this.projectForm.get('groupId').setValue(+this.projectForm.value.groupId);
 			this.projectDataStorageService.createNewProject(this.projectForm.value);
 			this.projectForm.reset();
@@ -75,7 +59,6 @@ export class NewProjectComponent implements OnInit, OnDestroy {
 			console.log(error.message);
 		}
 	}
-
 	onCancel() {
 		this.router.navigate(['../'], { relativeTo: this.route });
 	}
@@ -87,20 +70,50 @@ export class NewProjectComponent implements OnInit, OnDestroy {
 		return null;
 	}
 
-	// existVisa(control: FormControl): { [s: string]: boolean } {
-	// 	const members = control.value.split(', ');
-	// 	const notExistMembers = [];
-	// 	for (let member of members) {
-	// 		if (this.employeesLoaded.find((employee) => employee.visa === member)) {
-	// 			notExistMembers.push(member);
-	// 		}
-	// 	}
-	// 	if (notExistMembers) {
-	// 		this.notExistMembers = notExistMembers;
-	// 		return { existMembers: true };
-	// 	}
-	// 	return null;
-	// }
+	checkMembers(visaList: string[]): number[] {
+		const memberIDs: number[] = [];
+		const employees = this.employees;
+
+		for (let member of visaList) {
+			const existEmployee = employees.find((employee) => employee.visa === member);
+
+			if (existEmployee) {
+				memberIDs.push(existEmployee.id);
+			} else {
+				memberIDs.push(0);
+			}
+		}
+
+		return memberIDs;
+	}
+
+	notExistVisa(control: FormControl): Promise<any> | Observable<any> {
+		const promise = new Promise<any>((resolve, reject) => {
+			setTimeout(() => {
+				if (control.value === '') {
+					resolve(null);
+				}
+				const visaList = control.value.split(', ');
+
+				const memberIDs = this.checkMembers(visaList);
+				this.notExistMembers = '';
+
+				if (memberIDs.includes(0)) {
+					for (let i = 0; i < memberIDs.length; i++) {
+						if (memberIDs[i] === 0) {
+							this.notExistMembers = this.notExistMembers + visaList[i] + ' ';
+						}
+					}
+
+					resolve({ notExistVisa: true });
+				} else {
+					this.memberIDs = memberIDs.slice();
+					resolve(null);
+				}
+			}, 1500);
+		});
+		return promise;
+	}
 
 	private initForm() {
 		const today = new Date();
@@ -109,7 +122,7 @@ export class NewProjectComponent implements OnInit, OnDestroy {
 			name: new FormControl('', Validators.required),
 			customer: new FormControl('', Validators.required),
 			groupId: new FormControl(1, Validators.required),
-			members: new FormControl(''),
+			members: new FormControl('', [], this.notExistVisa.bind(this)),
 			status: new FormControl('new', Validators.required),
 			startDate: new FormControl(today, Validators.required),
 			endDate: new FormControl(null)

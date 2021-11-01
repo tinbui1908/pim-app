@@ -67,6 +67,17 @@
 			</div>
 			<div class="col-md-10">
 				<input class="input long-input" type="text" id="members" formControlName="members" />
+				<br />
+				<span
+					*ngIf="
+						!projectForm.get('members').valid &&
+						projectForm.get('members').touched &&
+						notExistMembers !== ''
+					"
+					class="help-block"
+				>
+					The following visas do not exist: {{ notExistMembers }}
+				</span>
 			</div>
 		</div>
 		<div class="row">
