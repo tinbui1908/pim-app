@@ -1,3 +1,4 @@
+import { ProjectDataStorageService } from './../../../Shared/Project/project-data-storage.service';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
@@ -23,11 +24,12 @@ export class NewProjectComponent implements OnInit, OnDestroy {
 	employeesSubscription!: Subscription;
 
 	constructor(
-		private projectService: ProjectService,
 		private route: ActivatedRoute,
 		private router: Router,
 		private groupService: GroupService,
-		private employeeService: EmployeeService
+		private employeeService: EmployeeService,
+		private projectService: ProjectService,
+		private projectDataStorageService: ProjectDataStorageService
 	) {}
 
 	ngOnInit(): void {
@@ -66,7 +68,7 @@ export class NewProjectComponent implements OnInit, OnDestroy {
 			}
 
 			this.projectForm.get('groupId').setValue(+this.projectForm.value.groupId);
-			this.projectService.createNewProject(this.projectForm.value);
+			this.projectDataStorageService.createNewProject(this.projectForm.value);
 			this.projectForm.reset();
 			this.onCancel();
 		} catch (error) {
@@ -79,7 +81,7 @@ export class NewProjectComponent implements OnInit, OnDestroy {
 	}
 
 	existNumber(control: FormControl): { [s: string]: boolean } {
-		if (this.projectService.projects.find((project) => project.projectNumber === control.value)) {
+		if (this.projectService.getProjects().find((project) => project.projectNumber === control.value)) {
 			return { existNumber: true };
 		}
 		return null;
