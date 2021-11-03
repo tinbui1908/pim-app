@@ -6,7 +6,8 @@ import { NewProjectComponent } from './components/new-project/new-project.compon
 
 const routes: Routes = [
 	{ path: '', component: ProjectListComponent },
-	{ path: 'new', component: NewProjectComponent }
+	{ path: 'new', component: NewProjectComponent },
+	{ path: ':projectNumber', component: NewProjectComponent }
 ];
 
 @NgModule({

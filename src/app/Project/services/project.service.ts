@@ -11,8 +11,8 @@ export class ProjectService {
 		return this.projects.slice();
 	}
 
-	getProject(index: number) {
-		return this.projects[index];
+	getProject(projectNumber: number) {
+		return this.projects.find((project) => project.projectNumber === projectNumber);
 	}
 
 	setProjects(projects: Project[]) {
@@ -25,13 +25,15 @@ export class ProjectService {
 		this.projectsChanged.next(this.projects.slice());
 	}
 
-	updateRecipe(index: number, newProject: Project) {
+	updateProject(index: number, newProject: Project) {
 		this.projects[index] = newProject;
 		this.projectsChanged.next(this.projects.slice());
 	}
 
-	deleteRecipe(index: number) {
-		this.projects.splice(index, 1);
+	deleteProjects(selectedIDs: number[]) {
+		for (let id of selectedIDs) {
+			this.projects = this.projects.filter((project) => project.id !== id);
+		}
 		this.projectsChanged.next(this.projects.slice());
 	}
 }

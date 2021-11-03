@@ -1,4 +1,5 @@
-<h3>New Project</h3>
+<h3 *ngIf="editMode === false">New Project</h3>
+<h3 *ngIf="editMode === true">Edit Project</h3>
 <hr />
 <!-- <div class="alert alert-danger" *ngIf="!projectForm.valid && projectForm.touched">
 	<p>Please enter all the mandatory fields (*)</p>
@@ -10,7 +11,13 @@
 				<label for="projectNumber">Project Number <span class="compulsory-attribute">*</span></label>
 			</div>
 			<div class="col-md-9">
-				<input class="input" type="number" id="projectNumber" formControlName="projectNumber" />
+				<input
+					class="input"
+					type="number"
+					id="projectNumber"
+					formControlName="projectNumber"
+					[readonly]="editMode"
+				/>
 				<br />
 				<span
 					*ngIf="!projectForm.get('projectNumber').valid && projectForm.get('projectNumber').touched"
@@ -87,9 +94,9 @@
 			<div class="col-md-10">
 				<select id="status" class="custom-dropdown form-control" formControlName="status">
 					<option value="new">New</option>
-					<option value="aab">Saab</option>
-					<option value="mers">Mercedes</option>
-					<option value="aud">Audi</option>
+					<option value="pla">Planned</option>
+					<option value="inp">In Progress</option>
+					<option value="fin">Finished</option>
 				</select>
 			</div>
 		</div>
@@ -111,7 +118,17 @@
 			<div class="col-md-5"></div>
 			<div class="col-md-7">
 				<button class="btn btn-light">Cancel</button>
-				<button class="btn btn-primary" type="submit" [disabled]="!projectForm.valid">Create Project</button>
+				<button type="submit" class="btn btn-success" [disabled]="!projectForm.valid" *ngIf="editMode === true">
+					Save
+				</button>
+				<button
+					class="btn btn-primary"
+					type="submit"
+					[disabled]="!projectForm.valid"
+					*ngIf="editMode === false"
+				>
+					Create Project
+				</button>
 			</div>
 		</div>
 	</form>

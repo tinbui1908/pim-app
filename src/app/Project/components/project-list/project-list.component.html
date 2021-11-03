@@ -21,36 +21,73 @@
 		</div>
 	</div>
 	<br />
-	<table class="table table-bordered">
-		<thead style="height: 32px">
-			<tr>
-				<th scope="col"></th>
-				<th scope="col">Number</th>
-				<th scope="col">Name</th>
-				<th scope="col">Status</th>
-				<th scope="col">Customer</th>
-				<th scope="col">Start Date</th>
-				<th scope="col">Delete</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr *ngFor="let project of projects; let i = index">
-				<td>
-					<span class="checkbox" for="checkbox">
-						<input type="checkbox" aria-label="Checkbox" id="checkbox"
-					/></span>
-				</td>
-				<td>{{ project.projectNumber }}</td>
-				<td>{{ project.name }}</td>
-				<td>{{ project.status }}</td>
-				<td>{{ project.customer }}</td>
-				<td>{{ project.startDate | date: 'dd.MM.yyyy' }}</td>
-				<td>
-					<i class="fa fa-trash-o" style="color: red" aria-hidden="true" [routerLink]=""></i>
-				</td>
-			</tr>
-		</tbody>
-	</table>
+	<form [formGroup]="projectForm" (ngSubmit)="onDelete()">
+		<table class="table table-bordered">
+			<thead style="height: 32px; text-align: center">
+				<tr>
+					<th scope="col"></th>
+					<th scope="col">Number</th>
+					<th scope="col">Name</th>
+					<th scope="col">Status</th>
+					<th scope="col">Customer</th>
+					<th scope="col">Start Date</th>
+					<th scope="col">Delete</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr formArrayName="selectedList" *ngFor="let project of controls; let i = index">
+					<td>
+						<span class="checkbox" for="checkbox" *ngIf="projects[i].status === 'new'">
+							<input type="checkbox" aria-label="Checkbox" id="checkbox" [formControlName]="i"
+						/></span>
+					</td>
+					<td style="text-align: center; color: blue">
+						<a routerLink="/projects/{{ projects[i].projectNumber }}">{{ projects[i].projectNumber }}</a>
+					</td>
+					<td>{{ projects[i].name }}</td>
+					<td style="text-align: center">{{ projects[i].status }}</td>
+					<td>{{ projects[i].customer }}</td>
+					<td style="text-align: center">{{ projects[i].startDate | date: 'dd.MM.yyyy' }}</td>
+					<td style="text-align: center">
+						<i
+							*ngIf="projects[i].status === 'new'"
+							class="fa fa-trash-o"
+							style="color: red"
+							aria-hidden="true"
+						></i>
+					</td>
+				</tr>
+				<tr class="table-light" *ngIf="selectedNum > 0">
+					<td colspan="7">
+						<div class="d-flex justify-content-between">
+							<span class="selected-items-area align-center">{{ selectedNum }} items selected</span>
+							<button
+								type="button"
+								class="delete-selected-area btn btn-sm btn-link"
+								(click)="open(content)"
+							>
+								delete selected items
+								<i class="fa fa-trash-o" style="color: red" aria-hidden="true"></i>
+							</button>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+	<ng-template #content let-modal>
+		<div class="modal-header">
+			<h4 class="modal-title" id="modal-basic-title">Confirm message from this web page</h4>
+			<button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+				<span aria-hidden="true"> × </span>
+			</button>
+		</div>
+		<div class="modal-body">Are you sure you want to delete these items?</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-primary" (click)="modal.close('Yes click')">Yes</button>
+			<button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('Cross click')">Cancel</button>
+		</div>
+	</ng-template>
 	<nav aria-label="Page navigation example">
 		<ul class="pagination justify-content-end">
 			<li class="page-item">

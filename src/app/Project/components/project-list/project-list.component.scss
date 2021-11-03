@@ -28,3 +28,13 @@ table.table-bordered > tbody > tr > td {
 	font-size: 14px;
 	background-color: white;
 }
+
+.selected-items-area {
+	color: rgb(17, 156, 221);
+	font-weight: 600;
+}
+
+.delete-selected-area {
+	color: red;
+	font-weight: 600;
+}

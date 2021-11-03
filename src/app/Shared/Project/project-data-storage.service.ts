@@ -35,6 +35,8 @@ export class ProjectDataStorageService {
 			})
 			.pipe(
 				map((responseData) => {
+					console.log(responseData);
+
 					const projectsArray: Project[] = [];
 					responseData.forEach((item) => {
 						projectsArray.push(item);
@@ -47,7 +49,24 @@ export class ProjectDataStorageService {
 				catchError((errorRes) => {
 					return throwError(errorRes);
 				})
-			)
-			.subscribe();
+			);
+	}
+
+	deleteItems(selectedItemIDs: number[]) {
+		console.log(selectedItemIDs);
+		// return this.http
+		// 	.post<Project>(environment.apiUrl + '/project/delete', selectedItemIDs, {
+		// 		observe: 'response',
+		// 		responseType: 'json'
+		// 	})
+		// 	.pipe(
+		// 		map((response) => {
+		// 			return response.body;
+		// 		}),
+		// 		tap((project) => {
+		// 			this.projectService.deleteItems(selectedItemIDs);
+		// 		})
+		// 	)
+		// 	.subscribe();
 	}
 }

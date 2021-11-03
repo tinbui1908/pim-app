@@ -1,6 +1,5 @@
-import { ProjectDataStorageService } from './../../../Shared/Project/project-data-storage.service';
 import { Observable, Subscription } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -9,6 +8,9 @@ import { Employee } from '../../../Shared/Employee/employee.model';
 import { ProjectService } from '../../services/project.service';
 import { GroupService } from '../../services/group.service';
 import { EmployeeService } from '../../services/employee.service';
+import { ProjectDataStorageService } from './../../../Shared/Project/project-data-storage.service';
+import { Project } from 'src/app/Shared/Project/project.model';
+import { formatDate } from '@angular/common';
 
 @Component({
 	selector: 'app-new-project',
@@ -17,6 +19,10 @@ import { EmployeeService } from '../../services/employee.service';
 })
 export class NewProjectComponent implements OnInit, OnDestroy {
 	projectForm: FormGroup;
+	editMode = false;
+	projectNumber!: number;
+	project!: Project;
+
 	groups: Group[];
 	employees: Employee[];
 	memberIDs: number[] = [];
@@ -35,7 +41,14 @@ export class NewProjectComponent implements OnInit, OnDestroy {
 	) {}
 
 	ngOnInit(): void {
-		this.initForm();
+		this.route.params.subscribe((params: Params) => {
+			this.projectNumber = +params['projectNumber'];
+			if (this.projectNumber) {
+				this.project = this.projectService.getProject(this.projectNumber);
+				this.editMode = true;
+			}
+			this.initForm();
+		});
 
 		this.groups = this.groupService.getGroups();
 		this.groupsSubscription = this.groupService.groupsChanged.subscribe((groups: Group[]) => {
@@ -52,9 +65,11 @@ export class NewProjectComponent implements OnInit, OnDestroy {
 		try {
 			this.projectForm.get('members').setValue(this.memberIDs);
 			this.projectForm.get('groupId').setValue(+this.projectForm.value.groupId);
-			this.projectDataStorageService.createNewProject(this.projectForm.value);
-			this.projectForm.reset();
-			this.onCancel();
+			if (this.editMode === true) {
+				this.projectDataStorageService.createNewProject(this.projectForm.value);
+				this.projectForm.reset();
+				this.onCancel();
+			}
 		} catch (error) {
 			console.log(error.message);
 		}
@@ -64,6 +79,9 @@ export class NewProjectComponent implements OnInit, OnDestroy {
 	}
 
 	existNumber(control: FormControl): { [s: string]: boolean } {
+		if (this.editMode === true) {
+			return null;
+		}
 		if (this.projectService.getProjects().find((project) => project.projectNumber === control.value)) {
 			return { existNumber: true };
 		}
@@ -116,16 +134,34 @@ export class NewProjectComponent implements OnInit, OnDestroy {
 	}
 
 	private initForm() {
-		const today = new Date();
+		let projectNumber = null;
+		let name = '';
+		let customer = '';
+		let groupId = 1;
+		let status = 'new';
+		let startDate = new Date();
+
+		let endDate = null;
+
+		if (this.editMode) {
+			projectNumber = this.project.projectNumber;
+			name = this.project.name;
+			customer = this.project.customer;
+			groupId = this.project.groupId;
+			status = this.project.status;
+			startDate = this.project.startDate;
+			endDate = this.project.endDate;
+		}
+
 		this.projectForm = new FormGroup({
-			projectNumber: new FormControl(null, [Validators.required, this.existNumber.bind(this)]),
-			name: new FormControl('', Validators.required),
-			customer: new FormControl('', Validators.required),
-			groupId: new FormControl(1, Validators.required),
+			projectNumber: new FormControl(projectNumber, [Validators.required, this.existNumber.bind(this)]),
+			name: new FormControl(name, Validators.required),
+			customer: new FormControl(customer, Validators.required),
+			groupId: new FormControl(groupId, Validators.required),
 			members: new FormControl('', [], this.notExistVisa.bind(this)),
-			status: new FormControl('new', Validators.required),
-			startDate: new FormControl(today, Validators.required),
-			endDate: new FormControl(null)
+			status: new FormControl(status, Validators.required),
+			startDate: new FormControl(formatDate(startDate, 'yyyy-MM-dd', 'en'), Validators.required),
+			endDate: new FormControl(endDate !== null ? formatDate(endDate, 'yyyy-MM-dd', 'en') : endDate)
 		});
 	}
 
