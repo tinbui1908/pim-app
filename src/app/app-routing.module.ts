@@ -1,15 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { ProjectResolverService } from './Shared/Project/projects-resolver.service';
+import { ProjectResolverService } from './Project/services/project/projects-resolver.service';
 import { ErrorComponent } from './error/error.component';
 
 const routes: Routes = [
 	{ path: '', redirectTo: '/projects', pathMatch: 'full' },
 	{
 		path: 'projects',
-		loadChildren: () => import('./Project/project.module').then((m) => m.ProjectModule),
-		resolve: [ProjectResolverService]
+		loadChildren: () => import('./Project/project.module').then((m) => m.ProjectModule)
 	},
 	{ path: 'not-found', component: ErrorComponent, data: { message: 'Page not found!' } },
 	{ path: '**', redirectTo: '/not-found' }

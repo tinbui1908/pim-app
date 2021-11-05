@@ -3,13 +3,13 @@ import { Injectable } from '@angular/core';
 import { catchError, map, tap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 
-import { environment } from '../../../environments/environment';
-import { Group } from './group.model';
-import { GroupService } from '../../Project/services/group.service';
+import { environment } from '../../../../environments/environment';
+import { Group } from '../../components/model/group.model';
+import { GroupDataStorageService } from './group-data-storage.service';
 
-@Injectable({ providedIn: 'root' })
-export class GroupDataStorageService {
-	constructor(private http: HttpClient, private groupService: GroupService) {}
+@Injectable()
+export class GroupService {
+	constructor(private http: HttpClient, private groupDataStorageService: GroupDataStorageService) {}
 
 	fetchGroups() {
 		return this.http
@@ -25,12 +25,11 @@ export class GroupDataStorageService {
 					return groupsArray;
 				}),
 				tap((groups: Group[]) => {
-					this.groupService.setGroups(groups);
+					this.groupDataStorageService.setGroups(groups);
 				}),
 				catchError((errorRes) => {
 					return throwError(errorRes);
 				})
-			)
-			.subscribe();
+			);
 	}
 }

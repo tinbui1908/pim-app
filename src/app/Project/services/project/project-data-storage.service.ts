@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import { Project } from 'src/app/Shared/Project/project.model';
+import { Project } from '../../components/model/project.model';
+
 @Injectable()
-export class ProjectService {
+export class ProjectDataStorageService {
 	private projects: Project[] = [];
 	projectsChanged = new Subject<Project[]>();
 

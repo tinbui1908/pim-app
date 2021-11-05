@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { ProjectService } from '../../Project/services/project.service';
 import { ProjectDataStorageService } from './project-data-storage.service';
-import { Project } from './project.model';
+import { ProjectService } from './project.service';
+import { Project } from '../../components/model/project.model';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class ProjectResolverService implements Resolve<Project[]> {
 	constructor(private projectDataStorageService: ProjectDataStorageService, private projectService: ProjectService) {}
 	resolve(route: ActivatedRouteSnapshot, status: RouterStateSnapshot) {
-		const projects = this.projectService.getProjects();
+		const projects = this.projectDataStorageService.getProjects();
 
 		if (projects.length === 0) {
-			return this.projectDataStorageService.fetchProjects();
+			return this.projectService.fetchProjects();
 		}
 
 		return projects;

@@ -1,25 +1,33 @@
 <div class="container">
 	<h3>Project List</h3>
 	<hr />
-	<div class="row">
-		<div class="col-4">
-			<input class="input" type="text" placeholder="  Project number, name, custom name" />
+	<form [formGroup]="featureForm" (ngSubmit)="onSearch()">
+		<div class="row">
+			<div class="col-4">
+				<input
+					class="input"
+					id="search"
+					type="text"
+					placeholder="  Project number, name, custom name"
+					formControlName="search"
+				/>
+			</div>
+			<div class="col-2">
+				<select id="status" class="custom-dropdown form-control" formControlName="status">
+					<option value="new">New</option>
+					<option value="pla">Planned</option>
+					<option value="inp">In Progress</option>
+					<option value="fin">Finished</option>
+				</select>
+			</div>
+			<div class="col">
+				<button class="btn btn-primary" type="submit">Search Project</button>
+			</div>
+			<div class="col">
+				<button class="btn btn-light">Reset search</button>
+			</div>
 		</div>
-		<div class="col-2">
-			<select id="" class="custom-dropdown form-control">
-				<option value="">Project status</option>
-				<option value="">2</option>
-				<option value="">3</option>
-				<option value="">4</option>
-			</select>
-		</div>
-		<div class="col">
-			<button class="btn btn-primary">Search Project</button>
-		</div>
-		<div class="col">
-			<button class="btn btn-light">Reset search</button>
-		</div>
-	</div>
+	</form>
 	<br />
 	<form [formGroup]="projectForm" (ngSubmit)="onDelete()">
 		<table class="table table-bordered">
@@ -36,7 +44,7 @@
 			</thead>
 			<tbody>
 				<tr formArrayName="selectedList" *ngFor="let project of controls; let i = index">
-					<td>
+					<td style="text-align: center">
 						<span class="checkbox" for="checkbox" *ngIf="projects[i].status === 'new'">
 							<input type="checkbox" aria-label="Checkbox" id="checkbox" [formControlName]="i"
 						/></span>

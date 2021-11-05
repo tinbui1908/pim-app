@@ -1,10 +1,10 @@
 import { Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 
-import { Group } from '../../Shared/Group/group.model';
+import { Group } from '../../components/model/group.model';
 
 @Injectable()
-export class GroupService {
+export class GroupDataStorageService {
 	private groups: Group[] = [];
 	groupsChanged = new Subject<Group[]>();
 

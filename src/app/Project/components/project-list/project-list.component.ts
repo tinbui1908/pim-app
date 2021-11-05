@@ -2,10 +2,10 @@ import { Subscription } from 'rxjs';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
-import { Project } from '../../../Shared/Project/project.model';
-import { ProjectService } from '../../services/project.service';
+import { Project } from '../model/project.model';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
-import { ProjectDataStorageService } from 'src/app/Shared/Project/project-data-storage.service';
+import { ProjectService } from '../../services/project/project.service';
+import { ProjectDataStorageService } from '../../services/project/project-data-storage.service';
 
 @Component({
 	selector: 'pim-project-list',
@@ -16,6 +16,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 	projects: Project[];
 	projectSubscription!: Subscription;
 	projectForm: FormGroup;
+	featureForm: FormGroup;
 	closeResult = '';
 
 	constructor(
@@ -25,8 +26,8 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 	) {}
 
 	ngOnInit() {
-		this.projects = this.projectService.getProjects();
-		this.projectSubscription = this.projectService.projectsChanged.subscribe((projects: Project[]) => {
+		this.projects = this.projectDataStorageService.getProjects();
+		this.projectSubscription = this.projectDataStorageService.projectsChanged.subscribe((projects: Project[]) => {
 			this.projects = projects;
 			this.initForm();
 		});
@@ -47,6 +48,11 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 
 		this.projectForm = new FormGroup({
 			selectedList: selectedList
+		});
+
+		this.featureForm = new FormGroup({
+			search: new FormControl(''),
+			status: new FormControl('')
 		});
 	}
 
@@ -77,7 +83,13 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 			.map((checked, i) => (checked ? this.projects[i].id : null))
 			.filter((v) => v !== null);
 
-		this.projectDataStorageService.deleteItems(selectedItemIDs);
+		this.projectService.deleteItems(selectedItemIDs);
+	}
+
+	onSearch() {
+		const status = this.featureForm.get('status').value;
+		const search = this.featureForm.get('search').value;
+		this.projectService.searchProjects(status, search);
 	}
 
 	ngOnDestroy() {

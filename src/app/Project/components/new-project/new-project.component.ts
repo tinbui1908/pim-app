@@ -1,16 +1,16 @@
+import { EmployeeDataStorageService } from './../../services/employee/employee-data-storage.service';
 import { Observable, Subscription } from 'rxjs';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { Group } from '../../../Shared/Group/group.model';
-import { Employee } from '../../../Shared/Employee/employee.model';
-import { ProjectService } from '../../services/project.service';
-import { GroupService } from '../../services/group.service';
-import { EmployeeService } from '../../services/employee.service';
-import { ProjectDataStorageService } from './../../../Shared/Project/project-data-storage.service';
-import { Project } from 'src/app/Shared/Project/project.model';
+import { Group } from '../model/group.model';
+import { Employee } from '../model/employee.model';
+import { GroupDataStorageService } from '../../services/group/group-data-storage.service';
 import { formatDate } from '@angular/common';
+import { Project } from '../model/project.model';
+import { ProjectService } from '../../services/project/project.service';
+import { ProjectDataStorageService } from '../../services/project/project-data-storage.service';
 
 @Component({
 	selector: 'app-new-project',
@@ -34,8 +34,8 @@ export class NewProjectComponent implements OnInit, OnDestroy {
 	constructor(
 		private route: ActivatedRoute,
 		private router: Router,
-		private groupService: GroupService,
-		private employeeService: EmployeeService,
+		private groupDataStorageService: GroupDataStorageService,
+		private employeeDataStorageService: EmployeeDataStorageService,
 		private projectService: ProjectService,
 		private projectDataStorageService: ProjectDataStorageService
 	) {}
@@ -44,21 +44,23 @@ export class NewProjectComponent implements OnInit, OnDestroy {
 		this.route.params.subscribe((params: Params) => {
 			this.projectNumber = +params['projectNumber'];
 			if (this.projectNumber) {
-				this.project = this.projectService.getProject(this.projectNumber);
+				this.project = this.projectDataStorageService.getProject(this.projectNumber);
 				this.editMode = true;
 			}
 			this.initForm();
 		});
 
-		this.groups = this.groupService.getGroups();
-		this.groupsSubscription = this.groupService.groupsChanged.subscribe((groups: Group[]) => {
+		this.groups = this.groupDataStorageService.getGroups();
+		this.groupsSubscription = this.groupDataStorageService.groupsChanged.subscribe((groups: Group[]) => {
 			this.groups = groups;
 		});
 
-		this.employees = this.employeeService.getEmployees();
-		this.employeesSubscription = this.employeeService.employeesChange.subscribe((employees: Employee[]) => {
-			this.employees = employees;
-		});
+		this.employees = this.employeeDataStorageService.getEmployees();
+		this.employeesSubscription = this.employeeDataStorageService.employeesChange.subscribe(
+			(employees: Employee[]) => {
+				this.employees = employees;
+			}
+		);
 	}
 
 	onSubmit() {
@@ -66,7 +68,7 @@ export class NewProjectComponent implements OnInit, OnDestroy {
 			this.projectForm.get('members').setValue(this.memberIDs);
 			this.projectForm.get('groupId').setValue(+this.projectForm.value.groupId);
 			if (this.editMode === true) {
-				this.projectDataStorageService.createNewProject(this.projectForm.value);
+				this.projectService.createNewProject(this.projectForm.value);
 				this.projectForm.reset();
 				this.onCancel();
 			}
@@ -82,7 +84,7 @@ export class NewProjectComponent implements OnInit, OnDestroy {
 		if (this.editMode === true) {
 			return null;
 		}
-		if (this.projectService.getProjects().find((project) => project.projectNumber === control.value)) {
+		if (this.projectDataStorageService.getProjects().find((project) => project.projectNumber === control.value)) {
 			return { existNumber: true };
 		}
 		return null;
@@ -133,11 +135,23 @@ export class NewProjectComponent implements OnInit, OnDestroy {
 		return promise;
 	}
 
+	getVisas(employeeIds: number[]) {
+		let visaList = '';
+		employeeIds.map((member) => {
+			const employee = this.employeeDataStorageService.getEmployees().find((employee) => {
+				employee.id === member;
+			});
+			visaList = visaList + employee.visa + ', ';
+		});
+		return visaList.slice(0, visaList.length - 2);
+	}
+
 	private initForm() {
 		let projectNumber = null;
 		let name = '';
 		let customer = '';
 		let groupId = 1;
+		let members = '';
 		let status = 'new';
 		let startDate = new Date();
 
@@ -148,6 +162,7 @@ export class NewProjectComponent implements OnInit, OnDestroy {
 			name = this.project.name;
 			customer = this.project.customer;
 			groupId = this.project.groupId;
+			//members = this.getVisas(this.project.employees);
 			status = this.project.status;
 			startDate = this.project.startDate;
 			endDate = this.project.endDate;
@@ -158,7 +173,7 @@ export class NewProjectComponent implements OnInit, OnDestroy {
 			name: new FormControl(name, Validators.required),
 			customer: new FormControl(customer, Validators.required),
 			groupId: new FormControl(groupId, Validators.required),
-			members: new FormControl('', [], this.notExistVisa.bind(this)),
+			members: new FormControl(members, [], this.notExistVisa.bind(this)),
 			status: new FormControl(status, Validators.required),
 			startDate: new FormControl(formatDate(startDate, 'yyyy-MM-dd', 'en'), Validators.required),
 			endDate: new FormControl(endDate !== null ? formatDate(endDate, 'yyyy-MM-dd', 'en') : endDate)

@@ -1,3 +1,5 @@
+import { Employee } from './employee.model';
+
 export interface Project {
 	id: number;
 	projectNumber: number;
@@ -7,4 +9,5 @@ export interface Project {
 	startDate: Date;
 	endDate: Date;
 	groupId: number;
+	employees: number[];
 }
