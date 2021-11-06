@@ -96,7 +96,7 @@
 				</select>
 			</div>
 		</div>
-		<div class="row row-margin">
+		<div class="row">
 			<div class="col-lg-2 col-md-2 col col-sm-6">
 				<label for="startDate">Start date <span class="compulsory-attribute">*</span></label>
 			</div>
@@ -110,8 +110,11 @@
 				<input class="input-date" type="date" id="endDate" formControlName="endDate" />
 			</div>
 		</div>
-		<div *ngIf="errorDate.isError" class="help-block">
-			{{ errorDate.errorMessage }}
+		<div class="row row-margin">
+			<div class="col-md-2"></div>
+			<div class="col-md-10 help-block">
+				{{ errorDate.errorMessage }}
+			</div>
 		</div>
 		<hr />
 		<div class="row" style="margin-top: 38px">
@@ -129,7 +132,7 @@
 				<button
 					class="btn btn-primary"
 					type="submit"
-					[disabled]="!projectForm.valid"
+					[disabled]="!projectForm.valid || errorDate.isError"
 					*ngIf="editMode === false"
 				>
 					Create Project

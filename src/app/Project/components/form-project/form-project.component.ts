@@ -76,7 +76,7 @@ export class FormProjectComponent implements OnInit, OnDestroy {
 					.getProjects()
 					.find((project) => project.ProjectNumber == projectNumber).ID;
 				const updateProject = this.projectForm.value;
-				updateProject.id = id;
+				updateProject.ID = id;
 				this.projectService.updateProject(updateProject);
 			} else {
 				this.projectService.createNewProject(this.projectForm.value);

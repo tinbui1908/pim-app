@@ -55,7 +55,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 	}
 
 	get selectedNum() {
-		return this.projectForm.value.selectedList.filter((checked) => checked === true).length;
+		return this.projectForm.value.selectedList.filter((checked: boolean) => checked === true).length;
 	}
 
 	initProjectForm() {
@@ -74,7 +74,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	open(content) {
+	open(content: any) {
 		this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
 			(result) => {
 				this.closeResult = `Closed with: ${result}`;
@@ -82,10 +82,10 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 			},
 			(reason) => {
 				this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-				console.log(this.closeResult);
 			}
 		);
 	}
+
 	private getDismissReason(reason: any): string {
 		if (reason === ModalDismissReasons.ESC) {
 			return 'by pressing ESC';
@@ -98,8 +98,8 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 
 	onDelete() {
 		const selectedItemIDs = this.projectForm.value.selectedList
-			.map((checked, i) => (checked ? this.projects[i].ID : null))
-			.filter((v) => v !== null);
+			.map((checked: boolean, i: number) => (checked ? this.projects[i].ID : null))
+			.filter((v: any) => v !== null);
 
 		this.projectService.deleteItems(selectedItemIDs);
 	}

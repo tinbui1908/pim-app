@@ -1,5 +1,3 @@
-import { Employee } from './employee.model';
-
 export interface Project {
 	ID: number;
 	ProjectNumber: number;
