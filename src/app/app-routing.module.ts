@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { ProjectResolverService } from './Project/services/project/projects-resolver.service';
 import { ErrorComponent } from './error/error.component';
 
 const routes: Routes = [

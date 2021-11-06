@@ -3,12 +3,12 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { Group } from '../../model/group.model';
-import { Employee } from '../../model/employee.model';
+import { Group } from '../../models/group.model';
+import { Employee } from '../../models/employee.model';
 import { GroupDataStorageService } from '../../services/group/group-data-storage.service';
 import { EmployeeDataStorageService } from '../../services/employee/employee-data-storage.service';
 import { formatDate } from '@angular/common';
-import { Project } from '../../model/project.model';
+import { Project } from '../../models/project.model';
 import { ProjectService } from '../../services/project/project.service';
 import { ProjectDataStorageService } from '../../services/project/project-data-storage.service';
 

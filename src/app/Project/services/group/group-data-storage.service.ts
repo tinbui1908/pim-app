@@ -1,7 +1,7 @@
 import { Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 
-import { Group } from '../../model/group.model';
+import { Group } from '../../models/group.model';
 
 @Injectable()
 export class GroupDataStorageService {

@@ -2,7 +2,7 @@ import { Subscription } from 'rxjs';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
-import { Project } from '../../model/project.model';
+import { Project } from '../../models/project.model';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ProjectService } from '../../services/project/project.service';
 import { ProjectDataStorageService } from '../../services/project/project-data-storage.service';

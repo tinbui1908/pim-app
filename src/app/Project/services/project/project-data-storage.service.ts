@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import { Project } from '../../model/project.model';
+import { Project } from '../../models/project.model';
 
 @Injectable()
 export class ProjectDataStorageService {

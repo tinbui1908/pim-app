@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/r
 
 import { EmployeeDataStorageService } from './employee-data-storage.service';
 import { EmployeeService } from './employee.service';
-import { Employee } from '../../model/employee.model';
+import { Employee } from '../../models/employee.model';
 
 @Injectable()
 export class EmployeeResolverService implements Resolve<Employee[]> {
