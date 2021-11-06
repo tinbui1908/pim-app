@@ -4,7 +4,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
-import { Group } from '../../components/model/group.model';
+import { Group } from '../../model/group.model';
 import { GroupDataStorageService } from './group-data-storage.service';
 
 @Injectable()

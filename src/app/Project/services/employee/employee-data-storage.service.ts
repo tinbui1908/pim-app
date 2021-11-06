@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import { Employee } from '../../components/model/employee.model';
+import { Employee } from '../../model/employee.model';
 
 @Injectable()
 export class EmployeeDataStorageService {

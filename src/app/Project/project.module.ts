@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 
 import { ProjectListComponent } from './components/project-list/project-list.component';
 import { ProjectRoutingModule } from './project-routing.module';
-import { NewProjectComponent } from './components/new-project/new-project.component';
+import { FormProjectComponent } from './components/form-project/form-project.component';
 import { ProjectDataStorageService } from './services/project/project-data-storage.service';
 import { ProjectResolverService } from './services/project/projects-resolver.service';
 import { ProjectService } from './services/project/project.service';
@@ -16,7 +16,7 @@ import { EmployeeDataStorageService } from './services/employee/employee-data-st
 import { EmployeeService } from './services/employee/employee.service';
 
 @NgModule({
-	declarations: [ProjectListComponent, NewProjectComponent],
+	declarations: [ProjectListComponent, FormProjectComponent],
 	providers: [
 		EmployeeService,
 		EmployeeDataStorageService,

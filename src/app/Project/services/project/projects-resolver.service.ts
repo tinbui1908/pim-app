@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { ProjectDataStorageService } from './project-data-storage.service';
 import { ProjectService } from './project.service';
-import { Project } from '../../components/model/project.model';
+import { Project } from '../../model/project.model';
 
 @Injectable()
 export class ProjectResolverService implements Resolve<Project[]> {

@@ -3,7 +3,7 @@
 <hr />
 <div class="container">
 	<form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
-		<div class="row">
+		<div class="row row-margin">
 			<div class="col-md-2">
 				<label for="projectNumber">Project Number <span class="compulsory-attribute">*</span></label>
 			</div>
@@ -15,12 +15,14 @@
 					formControlName="projectNumber"
 					[readonly]="editMode"
 				/>
-				<br />
 				<span
 					*ngIf="!projectForm.get('projectNumber').valid && projectForm.get('projectNumber').touched"
 					class="help-block"
 					><span *ngIf="projectForm.get('projectNumber').errors['required']"
 						>Project number is required!</span
+					>
+					<span *ngIf="projectForm.get('projectNumber').errors['pattern']"
+						>Project number must be greater than 0!</span
 					>
 					<span *ngIf="projectForm.get('projectNumber').errors['existNumber']"
 						>The project number already existed. Please select a different project number</span
@@ -28,25 +30,23 @@
 				>
 			</div>
 		</div>
-		<div class="row">
+		<div class="row row-margin">
 			<div class="col-md-2">
 				<label for="projectName">Project name <span class="compulsory-attribute">*</span></label>
 			</div>
 			<div class="col-md-10">
 				<input class="input long-input" type="text" id="projectName" formControlName="name" />
-				<br />
 				<span *ngIf="!projectForm.get('name').valid && projectForm.get('name').touched" class="help-block">
 					Project name is required!</span
 				>
 			</div>
 		</div>
-		<div class="row">
+		<div class="row row-margin">
 			<div class="col-md-2">
 				<label for="customer">Customer <span class="compulsory-attribute">*</span></label>
 			</div>
 			<div class="col-md-10">
 				<input class="input long-input" type="text" id="customer" formControlName="customer" />
-				<br />
 				<span
 					*ngIf="!projectForm.get('customer').valid && projectForm.get('customer').touched"
 					class="help-block"
@@ -55,7 +55,7 @@
 				>
 			</div>
 		</div>
-		<div class="row">
+		<div class="row row-margin">
 			<div class="col-md-2">
 				<label for="group">Group <span class="compulsory-attribute">*</span></label>
 			</div>
@@ -65,13 +65,12 @@
 				</select>
 			</div>
 		</div>
-		<div class="row">
+		<div class="row row-margin">
 			<div class="col-md-2">
 				<label for="members">Members </label>
 			</div>
 			<div class="col-md-10">
 				<input class="input long-input" type="text" id="members" formControlName="members" />
-				<br />
 				<span
 					*ngIf="
 						!projectForm.get('members').valid &&
@@ -84,7 +83,7 @@
 				</span>
 			</div>
 		</div>
-		<div class="row">
+		<div class="row row-margin">
 			<div class="col-md-2">
 				<label for="status">Status <span class="compulsory-attribute">*</span></label>
 			</div>
@@ -97,7 +96,7 @@
 				</select>
 			</div>
 		</div>
-		<div class="row">
+		<div class="row row-margin">
 			<div class="col-lg-2 col-md-2 col col-sm-6">
 				<label for="startDate">Start date <span class="compulsory-attribute">*</span></label>
 			</div>
@@ -111,11 +110,20 @@
 				<input class="input-date" type="date" id="endDate" formControlName="endDate" />
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-md-5"></div>
+		<div *ngIf="errorDate.isError" class="help-block">
+			{{ errorDate.errorMessage }}
+		</div>
+		<hr />
+		<div class="row" style="margin-top: 38px">
+			<div class="col-md-4"></div>
 			<div class="col-md-7">
 				<button class="btn btn-light">Cancel</button>
-				<button type="submit" class="btn btn-success" [disabled]="!projectForm.valid" *ngIf="editMode === true">
+				<button
+					type="submit"
+					class="btn btn-success"
+					[disabled]="!projectForm.valid || errorDate.isError"
+					*ngIf="editMode === true"
+				>
 					Save
 				</button>
 				<button
@@ -130,4 +138,3 @@
 		</div>
 	</form>
 </div>
-<hr />

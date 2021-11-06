@@ -1,12 +1,14 @@
-.row {
+.row-margin {
 	margin-bottom: 38px;
 }
 
 .input {
-	width: 25%;
+	width: 27%;
 	height: 30px;
 	border: 1px solid #b9b9b9;
 	border-radius: 5px;
+	display: block;
+	padding: 5px 5px 5px 7px;
 }
 
 .input-date {
@@ -14,6 +16,7 @@
 	height: 30px;
 	border: 1px solid #b9b9b9;
 	border-radius: 5px;
+	padding: 5px 5px 5px 7px;
 }
 
 .long-input {
@@ -37,7 +40,7 @@
 .btn {
 	height: 35px;
 	width: 165px;
-	margin-right: 10%;
+	margin-left: 6%;
 	border-radius: 5px;
 	font-weight: 500;
 	text-align: center;
@@ -45,8 +48,7 @@
 }
 .btn-light {
 	border: 1px solid #b9b9b9;
-	//must not use negative margin
-	margin-left: -8.5%;
+	margin-right: 4.5%;
 }
 
 .container {
@@ -54,7 +56,7 @@
 }
 
 hr {
-	margin-right: 18%;
+	margin-right: 17%;
 }
 
 input.ng-invalid.ng-touched {

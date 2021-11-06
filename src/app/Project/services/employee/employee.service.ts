@@ -5,7 +5,7 @@ import { throwError } from 'rxjs';
 
 import { EmployeeDataStorageService } from './employee-data-storage.service';
 import { environment } from '../../../../environments/environment';
-import { Employee } from '../../components/model/employee.model';
+import { Employee } from '../../model/employee.model';
 
 @Injectable()
 export class EmployeeService {

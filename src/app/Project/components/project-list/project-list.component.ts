@@ -2,7 +2,7 @@ import { Subscription } from 'rxjs';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
-import { Project } from '../model/project.model';
+import { Project } from '../../model/project.model';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ProjectService } from '../../services/project/project.service';
 import { ProjectDataStorageService } from '../../services/project/project-data-storage.service';
@@ -16,6 +16,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ProjectListComponent implements OnInit, OnDestroy {
 	projects: Project[];
 	projectSubscription!: Subscription;
+	routeSubscription: Subscription;
 	projectForm: FormGroup;
 	featureForm: FormGroup;
 	closeResult = '';
@@ -29,13 +30,24 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 	) {}
 
 	ngOnInit() {
+		let status = '',
+			search = '';
+		this.routeSubscription = this.route.queryParamMap.subscribe((params) => {
+			status = params.get('status') || '';
+			search = params.get('search') || '';
+			this.initFeatureForm(status, search);
+		});
+
+		if (search != '' || status != '') {
+			this.projectService.searchProjects(status, search);
+		}
+
 		this.projects = this.projectDataStorageService.getProjects();
 		this.projectSubscription = this.projectDataStorageService.projectsChanged.subscribe((projects: Project[]) => {
 			this.projects = projects;
 			this.initProjectForm();
 		});
 		this.initProjectForm();
-		this.initFeatureForm();
 	}
 
 	get controls() {
@@ -55,10 +67,10 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	initFeatureForm() {
+	initFeatureForm(status: string, search: string) {
 		this.featureForm = new FormGroup({
-			search: new FormControl(''),
-			status: new FormControl('')
+			status: new FormControl(status),
+			search: new FormControl(search)
 		});
 	}
 
@@ -95,15 +107,22 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 	onSearch() {
 		const status = this.featureForm.get('status').value;
 		const search = this.featureForm.get('search').value;
+		if (search === '' && status !== '') {
+			this.router.navigate(['../projects'], { queryParams: { status: status } });
+		} else if (status === '' && search !== '') {
+			this.router.navigate(['../projects'], { queryParams: { search: search } });
+		} else if (status !== '' && search !== '') {
+			this.router.navigate(['../projects'], { queryParams: { status: status, search: search } });
+		}
 		this.projectService.searchProjects(status, search);
 	}
 
 	onResetSearch() {
-		this.featureForm.reset();
-		window.location.reload();
+		this.router.navigate(['../projects'], { relativeTo: this.route });
 	}
 
 	ngOnDestroy() {
 		this.projectSubscription.unsubscribe();
+		this.routeSubscription.unsubscribe();
 	}
 }

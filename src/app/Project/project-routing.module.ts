@@ -4,19 +4,19 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { ProjectListComponent } from './components/project-list/project-list.component';
-import { NewProjectComponent } from './components/new-project/new-project.component';
+import { FormProjectComponent } from './components/form-project/form-project.component';
 import { ProjectResolverService } from './services/project/projects-resolver.service';
 
 const routes: Routes = [
 	{ path: '', component: ProjectListComponent, resolve: [ProjectResolverService] },
 	{
 		path: 'new',
-		component: NewProjectComponent,
+		component: FormProjectComponent,
 		resolve: [ProjectResolverService, GroupResolverService, EmployeeResolverService]
 	},
 	{
 		path: ':projectNumber',
-		component: NewProjectComponent,
+		component: FormProjectComponent,
 		resolve: [ProjectResolverService, GroupResolverService, EmployeeResolverService]
 	}
 ];

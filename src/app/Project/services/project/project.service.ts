@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Subject, throwError } from 'rxjs';
 
-import { Project } from '../../components/model/project.model';
+import { Project } from '../../model/project.model';
 import { environment } from '../../../../environments/environment';
 import { ProjectDataStorageService } from './project-data-storage.service';
 

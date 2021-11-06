@@ -3,25 +3,26 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { Group } from '../model/group.model';
-import { Employee } from '../model/employee.model';
+import { Group } from '../../model/group.model';
+import { Employee } from '../../model/employee.model';
 import { GroupDataStorageService } from '../../services/group/group-data-storage.service';
 import { EmployeeDataStorageService } from '../../services/employee/employee-data-storage.service';
 import { formatDate } from '@angular/common';
-import { Project } from '../model/project.model';
+import { Project } from '../../model/project.model';
 import { ProjectService } from '../../services/project/project.service';
 import { ProjectDataStorageService } from '../../services/project/project-data-storage.service';
 
 @Component({
 	selector: 'app-new-project',
-	templateUrl: './new-project.component.html',
-	styleUrls: ['./new-project.component.scss']
+	templateUrl: './form-project.component.html',
+	styleUrls: ['./form-project.component.scss']
 })
-export class NewProjectComponent implements OnInit, OnDestroy {
+export class FormProjectComponent implements OnInit, OnDestroy {
 	projectForm: FormGroup;
 	editMode = false;
 	projectNumber!: number;
 	project!: Project;
+	errorDate: any = { isError: false, errorMessage: '' };
 
 	groups: Group[];
 	employees: Employee[];
@@ -65,21 +66,24 @@ export class NewProjectComponent implements OnInit, OnDestroy {
 	}
 
 	onSubmit() {
-		this.projectForm.get('members').setValue(this.memberIDs);
-		this.projectForm.get('groupId').setValue(+this.projectForm.value.groupId);
-		if (this.editMode === true) {
-			const projectNumber = this.projectForm.get('projectNumber').value;
-			const id = this.projectDataStorageService
-				.getProjects()
-				.find((project) => project.ProjectNumber == projectNumber).ID;
-			const updateProject = this.projectForm.value;
-			updateProject.id = id;
-			this.projectService.updateProject(updateProject);
-		} else {
-			this.projectService.createNewProject(this.projectForm.value);
+		this.compareTwoDates();
+		if (!this.errorDate.isError) {
+			this.projectForm.get('members').setValue(this.memberIDs);
+			this.projectForm.get('groupId').setValue(+this.projectForm.value.groupId);
+			if (this.editMode === true) {
+				const projectNumber = this.projectForm.get('projectNumber').value;
+				const id = this.projectDataStorageService
+					.getProjects()
+					.find((project) => project.ProjectNumber == projectNumber).ID;
+				const updateProject = this.projectForm.value;
+				updateProject.id = id;
+				this.projectService.updateProject(updateProject);
+			} else {
+				this.projectService.createNewProject(this.projectForm.value);
+			}
+			this.projectForm.reset();
+			this.onCancel();
 		}
-		this.projectForm.reset();
-		this.onCancel();
 	}
 	onCancel() {
 		this.router.navigate(['../'], { relativeTo: this.route });
@@ -154,6 +158,19 @@ export class NewProjectComponent implements OnInit, OnDestroy {
 		return visaList.slice(0, visaList.length - 2);
 	}
 
+	compareTwoDates() {
+		const endDate: Date = this.projectForm.controls['endDate'].value;
+		const startDate: Date = this.projectForm.controls['startDate'].value;
+		if (endDate < startDate) {
+			this.errorDate = {
+				isError: true,
+				errorMessage: 'End date can not before start date, please edit end date or start date!'
+			};
+		} else {
+			this.errorDate = { isError: false, errorMessage: '' };
+		}
+	}
+
 	private initForm() {
 		let projectNumber = null;
 		let name = '';
@@ -177,7 +194,11 @@ export class NewProjectComponent implements OnInit, OnDestroy {
 		}
 
 		this.projectForm = new FormGroup({
-			projectNumber: new FormControl(projectNumber, [Validators.required, this.existNumber.bind(this)]),
+			projectNumber: new FormControl(projectNumber, [
+				Validators.required,
+				Validators.pattern(/^[1-9]+[0-0]*$/),
+				this.existNumber.bind(this)
+			]),
 			name: new FormControl(name, Validators.required),
 			customer: new FormControl(customer, Validators.required),
 			groupId: new FormControl(groupId, Validators.required),
