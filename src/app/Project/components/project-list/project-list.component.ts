@@ -6,6 +6,7 @@ import { Project } from '../model/project.model';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ProjectService } from '../../services/project/project.service';
 import { ProjectDataStorageService } from '../../services/project/project-data-storage.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
 	selector: 'pim-project-list',
@@ -22,17 +23,21 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 	constructor(
 		private modalService: NgbModal,
 		private projectService: ProjectService,
-		private projectDataStorageService: ProjectDataStorageService
+		private projectDataStorageService: ProjectDataStorageService,
+		private route: ActivatedRoute,
+		private router: Router
 	) {}
 
 	ngOnInit() {
 		this.projects = this.projectDataStorageService.getProjects();
 		this.projectSubscription = this.projectDataStorageService.projectsChanged.subscribe((projects: Project[]) => {
 			this.projects = projects;
-			this.initForm();
+			this.initProjectForm();
 		});
-		this.initForm();
+		this.initProjectForm();
+		this.initFeatureForm();
 	}
+
 	get controls() {
 		// a getter!
 		return (<FormArray>this.projectForm.get('selectedList')).controls;
@@ -42,14 +47,16 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 		return this.projectForm.value.selectedList.filter((checked) => checked === true).length;
 	}
 
-	initForm() {
+	initProjectForm() {
 		let selectedList = new FormArray([]);
 		this.projects.forEach(() => selectedList.push(new FormControl(false)));
 
 		this.projectForm = new FormGroup({
 			selectedList: selectedList
 		});
+	}
 
+	initFeatureForm() {
 		this.featureForm = new FormGroup({
 			search: new FormControl(''),
 			status: new FormControl('')
@@ -90,6 +97,11 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 		const status = this.featureForm.get('status').value;
 		const search = this.featureForm.get('search').value;
 		this.projectService.searchProjects(status, search);
+	}
+
+	onResetSearch() {
+		this.featureForm.reset();
+		window.location.reload();
 	}
 
 	ngOnDestroy() {

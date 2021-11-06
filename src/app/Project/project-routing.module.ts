@@ -9,7 +9,11 @@ import { ProjectResolverService } from './services/project/projects-resolver.ser
 
 const routes: Routes = [
 	{ path: '', component: ProjectListComponent, resolve: [ProjectResolverService] },
-	{ path: 'new', component: NewProjectComponent, resolve: [GroupResolverService, EmployeeResolverService] },
+	{
+		path: 'new',
+		component: NewProjectComponent,
+		resolve: [ProjectResolverService, GroupResolverService, EmployeeResolverService]
+	},
 	{
 		path: ':projectNumber',
 		component: NewProjectComponent,

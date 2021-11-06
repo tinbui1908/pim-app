@@ -17,4 +17,8 @@ export class EmployeeDataStorageService {
 	getEmployees() {
 		return this.employees.slice();
 	}
+
+	getEmployee(id: number) {
+		return this.employees.find((employee) => employee.id === id);
+	}
 }

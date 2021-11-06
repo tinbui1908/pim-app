@@ -8,7 +8,7 @@
 					class="input"
 					id="search"
 					type="text"
-					placeholder="  Project number, name, custom name"
+					placeholder="  Project number, name, customer"
 					formControlName="search"
 				/>
 			</div>
@@ -24,7 +24,7 @@
 				<button class="btn btn-primary" type="submit">Search Project</button>
 			</div>
 			<div class="col">
-				<button class="btn btn-light">Reset search</button>
+				<button class="btn btn-light" (click)="onResetSearch()">Reset search</button>
 			</div>
 		</div>
 	</form>

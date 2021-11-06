@@ -26,8 +26,12 @@ export class ProjectDataStorageService {
 		this.projectsChanged.next(this.projects.slice());
 	}
 
-	updateProject(index: number, newProject: Project) {
-		this.projects[index] = newProject;
+	updateProject(updateProject: Project) {
+		for (let i = 0; i < this.projects.length; i++) {
+			if (this.projects[i].projectNumber === updateProject.projectNumber) {
+				this.projects[i] = updateProject;
+			}
+		}
 		this.projectsChanged.next(this.projects.slice());
 	}
 

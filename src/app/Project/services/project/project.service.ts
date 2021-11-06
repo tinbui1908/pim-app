@@ -28,6 +28,23 @@ export class ProjectService {
 			.subscribe();
 	}
 
+	updateProject(updateProject: Project) {
+		return this.http
+			.put<Project>(environment.apiUrl + '/project', updateProject, {
+				observe: 'response',
+				responseType: 'json'
+			})
+			.pipe(
+				map((response) => {
+					return response.body;
+				}),
+				tap((project) => {
+					this.projectDataStorageService.updateProject(project);
+				})
+			)
+			.subscribe();
+	}
+
 	fetchProjects() {
 		return this.http
 			.get<Project[]>(environment.apiUrl + '/project', {
@@ -86,6 +103,7 @@ export class ProjectService {
 				catchError((errorRes) => {
 					return throwError(errorRes);
 				})
-			);
+			)
+			.subscribe();
 	}
 }

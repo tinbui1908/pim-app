@@ -50,7 +50,13 @@
 			<br />
 			<div class="nav flex-column nav-pills" aria-orientation="vertical">
 				<h5 class="nav-link">Project list</h5>
-				<a class="nav-link" routerLinkActive="activeLink" routerLink="/projects/new">New</a>
+				<a
+					class="nav-link"
+					routerLinkActive="activeLink"
+					[routerLinkActiveOptions]="{ exact: true }"
+					routerLink="/projects/new"
+					>New</a
+				>
 				<a
 					class="nav-link"
 					routerLinkActive="activeLink"

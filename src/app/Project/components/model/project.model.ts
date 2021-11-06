@@ -9,5 +9,5 @@ export interface Project {
 	startDate: Date;
 	endDate: Date;
 	groupId: number;
-	employees: number[];
+	members: number[];
 }

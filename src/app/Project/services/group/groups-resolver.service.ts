@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 
-import { Group } from './../../components/model/group.model';
+import { Group } from '../../components/model/group.model';
 import { GroupService } from './group.service';
 import { GroupDataStorageService } from './group-data-storage.service';
 
