@@ -1,4 +1,4 @@
 export interface Group {
-	id: number;
-	groupLeaderId: number;
+	ID: number;
+	GroupLeaderId: number;
 }

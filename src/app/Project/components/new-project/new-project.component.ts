@@ -65,25 +65,21 @@ export class NewProjectComponent implements OnInit, OnDestroy {
 	}
 
 	onSubmit() {
-		try {
-			this.projectForm.get('members').setValue(this.memberIDs);
-			this.projectForm.get('groupId').setValue(+this.projectForm.value.groupId);
-			if (this.editMode === true) {
-				const projectNumber = this.projectForm.get('projectNumber').value;
-				const id = this.projectDataStorageService
-					.getProjects()
-					.find((project) => project.projectNumber == projectNumber).id;
-				const updateProject = this.projectForm.value;
-				updateProject.id = id;
-				this.projectService.updateProject(updateProject);
-			} else {
-				this.projectService.createNewProject(this.projectForm.value);
-			}
-			this.projectForm.reset();
-			this.onCancel();
-		} catch (error) {
-			console.log(error.message);
+		this.projectForm.get('members').setValue(this.memberIDs);
+		this.projectForm.get('groupId').setValue(+this.projectForm.value.groupId);
+		if (this.editMode === true) {
+			const projectNumber = this.projectForm.get('projectNumber').value;
+			const id = this.projectDataStorageService
+				.getProjects()
+				.find((project) => project.ProjectNumber == projectNumber).ID;
+			const updateProject = this.projectForm.value;
+			updateProject.id = id;
+			this.projectService.updateProject(updateProject);
+		} else {
+			this.projectService.createNewProject(this.projectForm.value);
 		}
+		this.projectForm.reset();
+		this.onCancel();
 	}
 	onCancel() {
 		this.router.navigate(['../'], { relativeTo: this.route });
@@ -93,7 +89,7 @@ export class NewProjectComponent implements OnInit, OnDestroy {
 		if (this.editMode === true) {
 			return null;
 		}
-		if (this.projectDataStorageService.getProjects().find((project) => project.projectNumber === control.value)) {
+		if (this.projectDataStorageService.getProjects().find((project) => project.ProjectNumber === control.value)) {
 			return { existNumber: true };
 		}
 		return null;
@@ -104,10 +100,10 @@ export class NewProjectComponent implements OnInit, OnDestroy {
 		const employees = this.employees;
 
 		for (let member of visaList) {
-			const existEmployee = employees.find((employee) => employee.visa === member);
+			const existEmployee = employees.find((employee) => employee.Visa === member);
 
 			if (existEmployee) {
-				memberIDs.push(existEmployee.id);
+				memberIDs.push(existEmployee.ID);
 			} else {
 				memberIDs.push(0);
 			}
@@ -153,7 +149,7 @@ export class NewProjectComponent implements OnInit, OnDestroy {
 		let emp: Employee;
 		for (let member of employeeIds) {
 			emp = this.employeeDataStorageService.getEmployee(member);
-			visaList = visaList + emp.visa + ', ';
+			visaList = visaList + emp.Visa + ', ';
 		}
 		return visaList.slice(0, visaList.length - 2);
 	}
@@ -170,14 +166,14 @@ export class NewProjectComponent implements OnInit, OnDestroy {
 		let endDate = null;
 
 		if (this.editMode) {
-			projectNumber = this.project.projectNumber;
-			name = this.project.name;
-			customer = this.project.customer;
-			groupId = this.project.groupId;
-			members = this.getVisas(this.project.members);
-			status = this.project.status;
-			startDate = this.project.startDate;
-			endDate = this.project.endDate;
+			projectNumber = this.project.ProjectNumber;
+			name = this.project.Name;
+			customer = this.project.Customer;
+			groupId = this.project.GroupId;
+			members = this.getVisas(this.project.Members);
+			status = this.project.Status;
+			startDate = this.project.StartDate;
+			endDate = this.project.EndDate;
 		}
 
 		this.projectForm = new FormGroup({

@@ -1,7 +1,7 @@
 export interface Employee {
-	id: number;
-	visa: string;
-	firstName: string;
-	lastName: string;
-	birthDate: Date;
+	ID: number;
+	Visa: string;
+	FirstName: string;
+	LastName: string;
+	BirthDate: Date;
 }

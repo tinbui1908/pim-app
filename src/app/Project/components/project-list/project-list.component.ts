@@ -39,7 +39,6 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 	}
 
 	get controls() {
-		// a getter!
 		return (<FormArray>this.projectForm.get('selectedList')).controls;
 	}
 
@@ -48,7 +47,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 	}
 
 	initProjectForm() {
-		let selectedList = new FormArray([]);
+		const selectedList = new FormArray([]);
 		this.projects.forEach(() => selectedList.push(new FormControl(false)));
 
 		this.projectForm = new FormGroup({
@@ -87,7 +86,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 
 	onDelete() {
 		const selectedItemIDs = this.projectForm.value.selectedList
-			.map((checked, i) => (checked ? this.projects[i].id : null))
+			.map((checked, i) => (checked ? this.projects[i].ID : null))
 			.filter((v) => v !== null);
 
 		this.projectService.deleteItems(selectedItemIDs);

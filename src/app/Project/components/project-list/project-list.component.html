@@ -45,20 +45,20 @@
 			<tbody>
 				<tr formArrayName="selectedList" *ngFor="let project of controls; let i = index">
 					<td style="text-align: center">
-						<span class="checkbox" for="checkbox" *ngIf="projects[i].status === 'new'">
+						<span class="checkbox" for="checkbox" *ngIf="projects[i].Status === 'new'">
 							<input type="checkbox" aria-label="Checkbox" id="checkbox" [formControlName]="i"
 						/></span>
 					</td>
 					<td style="text-align: center; color: blue">
-						<a routerLink="/projects/{{ projects[i].projectNumber }}">{{ projects[i].projectNumber }}</a>
+						<a routerLink="/projects/{{ projects[i].ProjectNumber }}">{{ projects[i].ProjectNumber }}</a>
 					</td>
-					<td>{{ projects[i].name }}</td>
-					<td style="text-align: center">{{ projects[i].status }}</td>
-					<td>{{ projects[i].customer }}</td>
-					<td style="text-align: center">{{ projects[i].startDate | date: 'dd.MM.yyyy' }}</td>
+					<td>{{ projects[i].Name }}</td>
+					<td style="text-align: center">{{ projects[i].Status }}</td>
+					<td>{{ projects[i].Customer }}</td>
+					<td style="text-align: center">{{ projects[i].StartDate | date: 'dd.MM.yyyy' }}</td>
 					<td style="text-align: center">
 						<i
-							*ngIf="projects[i].status === 'new'"
+							*ngIf="projects[i].Status === 'new'"
 							class="fa fa-trash-o"
 							style="color: red"
 							aria-hidden="true"

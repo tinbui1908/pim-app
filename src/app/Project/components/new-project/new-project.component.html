@@ -1,9 +1,6 @@
 <h3 *ngIf="editMode === false">New Project</h3>
 <h3 *ngIf="editMode === true">Edit Project</h3>
 <hr />
-<!-- <div class="alert alert-danger" *ngIf="!projectForm.valid && projectForm.touched">
-	<p>Please enter all the mandatory fields (*)</p>
-</div> -->
 <div class="container">
 	<form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
 		<div class="row">
@@ -64,7 +61,7 @@
 			</div>
 			<div class="col-md-10">
 				<select id="group" class="custom-dropdown form-control" formControlName="groupId">
-					<option *ngFor="let group of groups" value="{{ group.id }}">{{ group.id }}</option>
+					<option *ngFor="let group of groups" value="{{ group.ID }}">{{ group.ID }}</option>
 				</select>
 			</div>
 		</div>

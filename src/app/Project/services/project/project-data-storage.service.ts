@@ -13,7 +13,7 @@ export class ProjectDataStorageService {
 	}
 
 	getProject(projectNumber: number) {
-		return this.projects.find((project) => project.projectNumber === projectNumber);
+		return this.projects.find((project) => project.ProjectNumber === projectNumber);
 	}
 
 	setProjects(projects: Project[]) {
@@ -28,7 +28,7 @@ export class ProjectDataStorageService {
 
 	updateProject(updateProject: Project) {
 		for (let i = 0; i < this.projects.length; i++) {
-			if (this.projects[i].projectNumber === updateProject.projectNumber) {
+			if (this.projects[i].ProjectNumber === updateProject.ProjectNumber) {
 				this.projects[i] = updateProject;
 			}
 		}
@@ -37,7 +37,7 @@ export class ProjectDataStorageService {
 
 	deleteProjects(selectedIDs: number[]) {
 		for (let id of selectedIDs) {
-			this.projects = this.projects.filter((project) => project.id !== id);
+			this.projects = this.projects.filter((project) => project.ID !== id);
 		}
 		this.projectsChanged.next(this.projects.slice());
 	}
