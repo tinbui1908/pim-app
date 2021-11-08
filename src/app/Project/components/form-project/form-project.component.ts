@@ -18,6 +18,9 @@ import { ProjectDataStorageService } from '../../services/project/project-data-s
 	styleUrls: ['./form-project.component.scss']
 })
 export class FormProjectComponent implements OnInit, OnDestroy {
+	private MAX_NUMBER = 1000000;
+	private MAX_LENGTH = 255;
+	private MIN_LENGTH = 5;
 	projectForm: FormGroup;
 	editMode = false;
 	projectNumber!: number;
@@ -72,17 +75,25 @@ export class FormProjectComponent implements OnInit, OnDestroy {
 			this.projectForm.get('groupId').setValue(+this.projectForm.value.groupId);
 			if (this.editMode === true) {
 				const projectNumber = this.projectForm.get('projectNumber').value;
-				const id = this.projectDataStorageService
-					.getProjects()
-					.find((project) => project.ProjectNumber == projectNumber).ID;
-				const updateProject = this.projectForm.value;
-				updateProject.ID = id;
-				this.projectService.updateProject(updateProject);
+				try {
+					const id = this.projectDataStorageService
+						.getProjects()
+						.find((project) => project.ProjectNumber == projectNumber).ID;
+					const updateProject = this.projectForm.value;
+					updateProject.ID = id;
+					this.projectService.updateProject(updateProject);
+					this.projectForm.reset();
+					this.onCancel();
+				} catch (error) {
+					let route = this.router.config.find((r) => r.path === 'not-found');
+					route.data = { message: 'Project ID is not exist!' };
+					this.router.navigate(['/not-found']);
+				}
 			} else {
 				this.projectService.createNewProject(this.projectForm.value);
+				this.projectForm.reset();
+				this.onCancel();
 			}
-			this.projectForm.reset();
-			this.onCancel();
 		}
 	}
 	onCancel() {
@@ -96,6 +107,28 @@ export class FormProjectComponent implements OnInit, OnDestroy {
 		if (this.projectDataStorageService.getProjects().find((project) => project.ProjectNumber === control.value)) {
 			return { existNumber: true };
 		}
+		return null;
+	}
+
+	inValidNumber(control: FormControl): { [s: string]: boolean } {
+		if (this.editMode === true) {
+			return null;
+		}
+		if (control.value > this.MAX_NUMBER || control.value <= 0) {
+			return { inValidNumber: true };
+		}
+		return null;
+	}
+
+	inValidString(control: FormControl): { [s: string]: boolean } {
+		if (this.editMode === true) {
+			return null;
+		}
+
+		if (control.value.trim().length > this.MAX_LENGTH || control.value.trim().length <= this.MIN_LENGTH) {
+			return { inValidString: true };
+		}
+
 		return null;
 	}
 
@@ -196,11 +229,12 @@ export class FormProjectComponent implements OnInit, OnDestroy {
 		this.projectForm = new FormGroup({
 			projectNumber: new FormControl(projectNumber, [
 				Validators.required,
-				Validators.pattern(/^[1-9]+[0-0]*$/),
-				this.existNumber.bind(this)
+
+				this.existNumber.bind(this),
+				this.inValidNumber.bind(this)
 			]),
-			name: new FormControl(name, Validators.required),
-			customer: new FormControl(customer, Validators.required),
+			name: new FormControl(name, [Validators.required, this.inValidString.bind(this)]),
+			customer: new FormControl(customer, [Validators.required, this.inValidString.bind(this)]),
 			groupId: new FormControl(groupId, Validators.required),
 			members: new FormControl(members, [], this.notExistVisa.bind(this)),
 			status: new FormControl(status, Validators.required),

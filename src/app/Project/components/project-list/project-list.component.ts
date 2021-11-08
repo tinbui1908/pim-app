@@ -73,11 +73,24 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	open(content: any) {
+	openNotiForItem(content: any, index: number) {
 		this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
 			(result) => {
 				this.closeResult = `Closed with: ${result}`;
-				this.onDelete();
+				const id = this.projects[index].ID;
+				this.projectService.deleteItemById(id);
+			},
+			(reason) => {
+				this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+			}
+		);
+	}
+
+	openNotiForManyItems(content: any) {
+		this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
+			(result) => {
+				this.closeResult = `Closed with: ${result}`;
+				this.deleteManyItems();
 			},
 			(reason) => {
 				this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -95,7 +108,7 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	onDelete() {
+	deleteManyItems() {
 		const selectedItemIDs = this.projectForm.value.selectedList
 			.map((checked: boolean, i: number) => (checked ? this.projects[i].ID : null))
 			.filter((v: any) => v !== null);
@@ -118,6 +131,8 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 
 	onResetSearch() {
 		this.router.navigate(['../projects'], { relativeTo: this.route });
+		this.initFeatureForm('', '');
+		this.projectService.searchProjects('', '');
 	}
 
 	ngOnDestroy() {

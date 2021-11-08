@@ -128,6 +128,29 @@ export class ProjectService {
 			.subscribe();
 	}
 
+	deleteItemById(id: number) {
+		return this.http
+			.delete<Project>(environment.apiUrl + `/project/${id}`, {
+				observe: 'response'
+			})
+			.pipe(
+				map((response) => {
+					return response;
+				}),
+				tap((project) => {
+					this.projectDataStorageService.deleteProject(id);
+				}),
+				catchError((errorRes) => {
+					let route = this.router.config.find((r) => r.path === 'not-found');
+					route.data = { message: errorRes.message };
+					this.router.navigate(['/not-found']);
+
+					return throwError(errorRes);
+				})
+			)
+			.subscribe();
+	}
+
 	searchProjects(status: string, search: string) {
 		return this.http
 			.get<Project[]>(environment.apiUrl + `/project?status=${status}&search=${search}`, {

@@ -25,12 +25,13 @@
 				<button class="btn btn-primary" type="submit">Search Project</button>
 			</div>
 			<div class="col col-xs-12">
-				<button class="btn btn-light" (click)="onResetSearch()">Reset search</button>
+				<button class="btn btn-light" type="button" (click)="onResetSearch()">Reset search</button>
 			</div>
 		</div>
 	</form>
 	<br />
-	<form [formGroup]="projectForm" (ngSubmit)="onDelete()">
+	<h4 *ngIf="projects.length === 0">No result!</h4>
+	<form [formGroup]="projectForm" *ngIf="projects.length > 0">
 		<table class="table table-bordered">
 			<thead style="height: 32px; text-align: center">
 				<tr>
@@ -54,16 +55,22 @@
 						<a routerLink="/projects/{{ projects[i].ProjectNumber }}">{{ projects[i].ProjectNumber }}</a>
 					</td>
 					<td>{{ projects[i].Name }}</td>
-					<td style="text-align: center">{{ projects[i].Status }}</td>
+					<td style="text-align: center" *ngIf="projects[i].Status === 'new'">New</td>
+					<td style="text-align: center" *ngIf="projects[i].Status === 'pla'">Planned</td>
+					<td style="text-align: center" *ngIf="projects[i].Status === 'inp'">In Progress</td>
+					<td style="text-align: center" *ngIf="projects[i].Status === 'fin'">Finished</td>
+
 					<td>{{ projects[i].Customer }}</td>
 					<td style="text-align: center">{{ projects[i].StartDate | date: 'dd.MM.yyyy' }}</td>
 					<td style="text-align: center">
-						<i
-							*ngIf="projects[i].Status === 'new'"
-							class="fa fa-trash-o"
-							style="color: red"
-							aria-hidden="true"
-						></i>
+						<button class="btn btn-sm btn-link" type="button" (click)="openNotiForItem(notiForDelete, i)">
+							<i
+								*ngIf="projects[i].Status === 'new'"
+								class="fa fa-trash-o"
+								style="color: red"
+								aria-hidden="true"
+							></i>
+						</button>
 					</td>
 				</tr>
 				<tr class="table-light" *ngIf="selectedNum > 0">
@@ -73,7 +80,7 @@
 							<button
 								type="button"
 								class="delete-selected-area btn btn-sm btn-link"
-								(click)="open(content)"
+								(click)="openNotiForManyItems(notiForDelete)"
 							>
 								delete selected items
 								<i class="fa fa-trash-o" style="color: red" aria-hidden="true"></i>
@@ -84,7 +91,7 @@
 			</tbody>
 		</table>
 	</form>
-	<ng-template #content let-modal>
+	<ng-template #notiForDelete let-modal>
 		<div class="modal-header">
 			<h4 class="modal-title" id="modal-basic-title">Confirm message from this web page</h4>
 			<button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">

@@ -52,4 +52,9 @@ export class ProjectDataStorageService {
 		}
 		this.projectsChanged.next(this.projects.slice());
 	}
+
+	deleteProject(id: number) {
+		this.projects = this.projects.filter((project) => project.ID !== id);
+		this.projectsChanged.next(this.projects.slice());
+	}
 }
