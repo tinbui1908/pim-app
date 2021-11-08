@@ -7,6 +7,7 @@ import { ProjectRoutingModule } from './project-routing.module';
 import { FormProjectComponent } from './components/form-project/form-project.component';
 import { ProjectDataStorageService } from './services/project/project-data-storage.service';
 import { ProjectResolverService } from './services/project/projects-resolver.service';
+import { ProjectByIdResolverService } from './services/project/projectById-resolver.service';
 import { ProjectService } from './services/project/project.service';
 import { GroupResolverService } from './services/group/groups-resolver.service';
 import { GroupDataStorageService } from './services/group/group-data-storage.service';
@@ -26,7 +27,8 @@ import { EmployeeService } from './services/employee/employee.service';
 		GroupResolverService,
 		ProjectService,
 		ProjectDataStorageService,
-		ProjectResolverService
+		ProjectResolverService,
+		ProjectByIdResolverService
 	],
 	imports: [CommonModule, ProjectRoutingModule, ReactiveFormsModule]
 })

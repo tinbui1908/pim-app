@@ -7,6 +7,8 @@ import { Project } from '../../models/project.model';
 export class ProjectDataStorageService {
 	private projects: Project[] = [];
 	projectsChanged = new Subject<Project[]>();
+	private projectById: Project;
+	projectByIdChanged = new Subject<Project>();
 
 	getProjects() {
 		return this.projects.slice();
@@ -16,9 +18,18 @@ export class ProjectDataStorageService {
 		return this.projects.find((project) => project.ProjectNumber === projectNumber);
 	}
 
+	getProjectById() {
+		return this.projectById;
+	}
+
 	setProjects(projects: Project[]) {
 		this.projects = projects;
 		this.projectsChanged.next(this.projects.slice());
+	}
+
+	setProject(project: Project) {
+		this.projectById = project;
+		this.projectByIdChanged.next(this.projectById);
 	}
 
 	addProject(project: Project) {

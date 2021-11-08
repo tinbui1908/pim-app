@@ -121,18 +121,11 @@
 			<div class="col-md-4"></div>
 			<div class="col-md-7">
 				<button class="btn btn-light">Cancel</button>
-				<button
-					type="submit"
-					class="btn btn-success"
-					[disabled]="!projectForm.valid || errorDate.isError"
-					*ngIf="editMode === true"
-				>
-					Save
-				</button>
+				<button type="submit" class="btn btn-success" *ngIf="editMode === true">Save</button>
 				<button
 					class="btn btn-primary"
 					type="submit"
-					[disabled]="!projectForm.valid || errorDate.isError"
+					[disabled]="!projectForm.valid"
 					*ngIf="editMode === false"
 				>
 					Create Project

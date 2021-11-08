@@ -41,7 +41,6 @@ export class ProjectListComponent implements OnInit, OnDestroy {
 		if (search != '' || status != '') {
 			this.projectService.searchProjects(status, search);
 		}
-
 		this.projects = this.projectDataStorageService.getProjects();
 		this.projectSubscription = this.projectDataStorageService.projectsChanged.subscribe((projects: Project[]) => {
 			this.projects = projects;

@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -9,7 +10,11 @@ import { GroupDataStorageService } from './group-data-storage.service';
 
 @Injectable()
 export class GroupService {
-	constructor(private http: HttpClient, private groupDataStorageService: GroupDataStorageService) {}
+	constructor(
+		private http: HttpClient,
+		private groupDataStorageService: GroupDataStorageService,
+		private router: Router
+	) {}
 
 	fetchGroups() {
 		return this.http
@@ -28,6 +33,10 @@ export class GroupService {
 					this.groupDataStorageService.setGroups(groups);
 				}),
 				catchError((errorRes) => {
+					let route = this.router.config.find((r) => r.path === 'not-found');
+					route.data = { message: errorRes.message };
+					this.router.navigate(['/not-found']);
+
 					return throwError(errorRes);
 				})
 			);

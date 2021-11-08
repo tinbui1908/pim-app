@@ -14,6 +14,7 @@
 			</div>
 			<div class="col-2">
 				<select id="status" class="custom-dropdown form-control" formControlName="status">
+					<option [hidden]="true" [ngValue]="''">Status</option>
 					<option value="new">New</option>
 					<option value="pla">Planned</option>
 					<option value="inp">In Progress</option>

@@ -58,7 +58,7 @@ export class FormProjectComponent implements OnInit, OnDestroy {
 			);
 
 			if (this.projectNumber) {
-				this.project = this.projectDataStorageService.getProject(this.projectNumber);
+				this.project = this.projectDataStorageService.getProjectById();
 				this.editMode = true;
 			}
 		});
@@ -161,7 +161,7 @@ export class FormProjectComponent implements OnInit, OnDestroy {
 	compareTwoDates() {
 		const endDate: Date = this.projectForm.controls['endDate'].value;
 		const startDate: Date = this.projectForm.controls['startDate'].value;
-		if (endDate < startDate) {
+		if (endDate <= startDate) {
 			this.errorDate = {
 				isError: true,
 				errorMessage: 'End date can not before start date, please edit end date or start date!'
@@ -175,7 +175,7 @@ export class FormProjectComponent implements OnInit, OnDestroy {
 		let projectNumber = null;
 		let name = '';
 		let customer = '';
-		let groupId = 1;
+		let groupId = this.groups[0].ID;
 		let members = '';
 		let status = 'new';
 		let startDate = new Date();

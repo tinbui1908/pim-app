@@ -1,3 +1,15 @@
 <div class="container">
-	<h2>{{ errorMessage }}</h2>
+	<div class="row">
+		<div class="col-md-1"></div>
+		<div class="col-md-4 col-xs-12">
+			<img src="../../assets/img/error.png" height="250px" />
+		</div>
+		<div class="col-md-7 col-xs-12" style="flex-direction: column; align-self: center">
+			<h4>Unexpected error occurred.</h4>
+			<h4>{{ errorMessage }}</h4>
+			<h4>Please <span style="color: red">contact your administrator</span></h4>
+			<br />
+			<h4>or <a routerLink="/projects">Back to search project</a></h4>
+		</div>
+	</div>
 </div>
