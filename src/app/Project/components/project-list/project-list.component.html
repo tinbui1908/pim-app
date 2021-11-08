@@ -3,7 +3,7 @@
 	<hr />
 	<form [formGroup]="featureForm" (ngSubmit)="onSearch()">
 		<div class="row">
-			<div class="col-4">
+			<div class="col-lg-4 col-md-6 col-xs-12">
 				<input
 					class="input"
 					id="search"
@@ -12,7 +12,7 @@
 					formControlName="search"
 				/>
 			</div>
-			<div class="col-2">
+			<div class="col-lg-2 col-md-6 col-xs-12">
 				<select id="status" class="custom-dropdown form-control" formControlName="status">
 					<option [hidden]="true" [ngValue]="''">Status</option>
 					<option value="new">New</option>
@@ -21,10 +21,10 @@
 					<option value="fin">Finished</option>
 				</select>
 			</div>
-			<div class="col">
+			<div class="col col-xs-12">
 				<button class="btn btn-primary" type="submit">Search Project</button>
 			</div>
-			<div class="col">
+			<div class="col col-xs-12">
 				<button class="btn btn-light" (click)="onResetSearch()">Reset search</button>
 			</div>
 		</div>
@@ -97,21 +97,4 @@
 			<button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('Cross click')">Cancel</button>
 		</div>
 	</ng-template>
-	<nav aria-label="Page navigation example">
-		<ul class="pagination justify-content-end">
-			<li class="page-item">
-				<a class="page-link" href="#" aria-label="Previous">
-					<span aria-hidden="true">&laquo;</span>
-				</a>
-			</li>
-			<li class="page-item"><a class="page-link" href="#">1</a></li>
-			<li class="page-item"><a class="page-link" href="#">2</a></li>
-			<li class="page-item"><a class="page-link" href="#">3</a></li>
-			<li class="page-item">
-				<a class="page-link" href="#" aria-label="Next">
-					<span aria-hidden="true">&raquo;</span>
-				</a>
-			</li>
-		</ul>
-	</nav>
 </div>
